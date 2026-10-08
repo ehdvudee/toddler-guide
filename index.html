@@ -1,0 +1,901 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>부모 행동 강령</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<style>
+/* Layout: one reading column. Rule cards carry a numeral rail; two CSS-built diagrams (daily map, tantrum sequence) sit between the lists. */
+:root {
+  --bg: #F2F5F4;
+  --surface: #FFFFFF;
+  --ink: #1B2528;
+  --muted: #586569;
+  --line: #D6DEDC;
+  --accent: #1E5C74;
+  --accent-soft: #E1EDF1;
+  --do: #2A7150;
+  --do-soft: #E2F0E7;
+  --dont: #A93C2C;
+  --dont-soft: #F6E3DE;
+  --font-display: "Hahmlet", "Noto Serif KR", "AppleMyungjo", serif;
+  --font-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101618; --surface: #172023; --ink: #E2E9EB; --muted: #9AA7AB; --line: #2A3639;
+    --accent: #79B7CE; --accent-soft: #1C3038; --do: #74C596; --do-soft: #183126;
+    --dont: #E8897A; --dont-soft: #3A201C; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101618; --surface: #172023; --ink: #E2E9EB; --muted: #9AA7AB; --line: #2A3639;
+  --accent: #79B7CE; --accent-soft: #1C3038; --do: #74C596; --do-soft: #183126;
+  --dont: #E8897A; --dont-soft: #3A201C; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.65;
+  word-break: keep-all; overflow-wrap: anywhere;
+}
+.wrap { max-width: 46rem; margin: 0 auto; padding-inline: clamp(16px, 4vw, 32px); padding-block: 2.5rem 4rem; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; color: var(--muted); }
+
+/* Masthead */
+.masthead { display: grid; gap: 1rem; padding-bottom: 1.75rem; border-bottom: 1px solid var(--line); }
+.masthead h1 { font-size: clamp(2.1rem, 7vw, 3rem); font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; }
+.lede { margin: 0; font-size: 1.05rem; max-width: 36rem; }
+.meta { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin: 0; padding: 0; list-style: none; font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.first { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1rem 1.15rem; }
+.first h2 { font-size: 1.05rem; margin-bottom: 0.5rem; }
+.first ol { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.3rem; }
+
+/* Jump nav */
+.jump { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); margin-inline: calc(-1 * clamp(16px, 4vw, 32px)); padding: 0.6rem clamp(16px, 4vw, 32px); border-bottom: 1px solid var(--line); }
+.jump ul { display: flex; gap: 0.4rem; margin: 0; padding: 0; list-style: none; overflow-x: auto; scrollbar-width: none; }
+.jump a { display: block; white-space: nowrap; text-decoration: none; font-size: 0.85rem; font-weight: 500; color: var(--ink); padding: 0.3rem 0.75rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+.jump a:hover { border-color: var(--accent); color: var(--accent); }
+
+section.block { padding-top: 2.75rem; display: grid; gap: 1.1rem; }
+.block-head { display: grid; gap: 0.35rem; }
+.block-head h2 { font-size: 1.6rem; font-weight: 700; }
+.block-head p { margin: 0; color: var(--muted); }
+.do-head h2 { color: var(--do); }
+.dont-head h2 { color: var(--dont); }
+
+/* Rule cards */
+.rules { display: grid; gap: 0.9rem; margin: 0; padding: 0; list-style: none; }
+.rule { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 0 0.9rem; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1.1rem 1.15rem 1rem 0.9rem; }
+.num { font-family: var(--font-display); font-size: 1.9rem; font-weight: 700; line-height: 1; text-align: center; padding-top: 0.15rem; font-variant-numeric: tabular-nums; }
+.do .num { color: var(--do); }
+.dont .num { color: var(--dont); }
+.body { min-width: 0; display: grid; gap: 0.6rem; }
+.tags { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; }
+.tag { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0.05rem 0.4rem; }
+.tag.mine { color: var(--accent); border-color: var(--accent); }
+.rule h3 { font-family: var(--font-body); font-size: 1.08rem; font-weight: 600; line-height: 1.5; }
+.lines { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.45rem; }
+.lines li { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 0.5rem; font-size: 0.95rem; }
+.lines li > span:first-child { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; padding-top: 0.2rem; color: var(--muted); }
+.dont .lines.slip li > span:last-child { background: var(--dont-soft); border-radius: 6px; padding: 0.15rem 0.5rem; }
+.instead { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 0.5rem; font-size: 0.95rem; margin: 0; padding-top: 0.5rem; border-top: 1px dashed var(--line); }
+.instead > span:first-child { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; padding-top: 0.2rem; color: var(--do); }
+.note { font-size: 0.85rem; color: var(--muted); margin: 0; }
+
+.evidence { display: flex; flex-wrap: wrap; gap: 0.35rem 0.5rem; align-items: center; font-size: 0.75rem; }
+.src { display: inline-flex; align-items: center; gap: 0.3rem; color: var(--muted); }
+.src::before { content: ""; width: 0.55rem; height: 0.55rem; border-radius: 50%; border: 1.5px solid var(--muted); }
+.src.on { color: var(--ink); }
+.src.on::before { background: var(--accent); border-color: var(--accent); }
+.strength { margin-left: auto; font-weight: 600; color: var(--accent); background: var(--accent-soft); border-radius: 4px; padding: 0.05rem 0.45rem; }
+details.cite { font-size: 0.82rem; }
+details.cite summary { cursor: pointer; color: var(--muted); font-weight: 500; }
+details.cite ul { margin: 0.4rem 0 0; padding-left: 1.1rem; display: grid; gap: 0.25rem; color: var(--muted); }
+
+/* Daily map diagram */
+.day { display: grid; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); gap: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.slot { padding: 0.9rem 0.85rem 1rem; display: grid; align-content: start; gap: 0.5rem; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-width: 0; }
+.slot h3 { font-size: 0.95rem; font-weight: 700; }
+.slot .when { font-size: 0.72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.chip { font-size: 0.78rem; text-decoration: none; padding: 0.15rem 0.5rem; border-radius: 999px; border: 1px solid transparent; line-height: 1.5; }
+.chip.d { color: var(--do); background: var(--do-soft); }
+.chip.x { color: var(--dont); background: var(--dont-soft); }
+.chip:hover { border-color: currentColor; }
+.legend { display: flex; gap: 1rem; font-size: 0.8rem; color: var(--muted); flex-wrap: wrap; }
+.legend span::before { content: ""; display: inline-block; width: 0.7rem; height: 0.7rem; border-radius: 3px; margin-right: 0.35rem; vertical-align: -1px; }
+.legend .ld::before { background: var(--do-soft); border: 1px solid var(--do); }
+.legend .lx::before { background: var(--dont-soft); border: 1px solid var(--dont); }
+
+/* Tantrum sequence diagram */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; counter-reset: step; }
+.steps li { position: relative; padding: 0 0.5rem 0 0; display: grid; gap: 0.35rem; align-content: start; }
+.steps .dot { width: 2rem; height: 2rem; border-radius: 50%; display: grid; place-items: center; background: var(--do); color: var(--surface); font-weight: 700; font-family: var(--font-display); position: relative; z-index: 1; }
+.steps li:not(:last-child)::after { content: ""; position: absolute; top: 1rem; left: 2rem; right: 0; height: 2px; background: var(--do); opacity: 0.35; }
+.steps b { font-size: 0.95rem; }
+.steps span.say { font-size: 0.85rem; }
+.steps .ref { font-size: 0.72rem; color: var(--muted); }
+.never { background: var(--dont-soft); border-radius: 10px; padding: 0.8rem 1rem; display: grid; gap: 0.45rem; }
+.never p { margin: 0; font-weight: 600; color: var(--dont); font-size: 0.9rem; }
+@media (max-width: 40rem) {
+  .steps { grid-template-columns: minmax(0, 1fr); gap: 0.9rem; }
+  .steps li { grid-template-columns: 2rem minmax(0, 1fr); column-gap: 0.75rem; padding: 0; }
+  .steps li > :not(.dot) { grid-column: 2; }
+  .steps .dot { grid-row: 1 / span 3; }
+  .steps li:not(:last-child)::after { top: 2rem; bottom: -0.9rem; left: 0.95rem; right: auto; width: 2px; height: auto; }
+}
+
+/* Panels */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1rem 1.15rem; display: grid; gap: 0.5rem; min-width: 0; }
+.panel h3 { font-family: var(--font-body); font-size: 1rem; font-weight: 600; }
+.panel ul { margin: 0; padding-left: 1.15rem; display: grid; gap: 0.3rem; font-size: 0.93rem; }
+.panel.alert { border-color: var(--dont); }
+.panel.alert h3 { color: var(--dont); }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 0.9rem; }
+
+.flow { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin: 0; padding: 0; list-style: none; font-size: 0.85rem; }
+.flow li { background: var(--accent-soft); color: var(--ink); border-radius: 6px; padding: 0.35rem 0.6rem; font-variant-numeric: tabular-nums; }
+.flow li b { color: var(--accent); }
+.flow li.sep { background: none; padding: 0; color: var(--muted); }
+
+footer.end { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line); font-size: 0.82rem; color: var(--muted); display: grid; gap: 0.3rem; }
+footer.end p { margin: 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <p class="label">18~24개월 · 아들 · 엄마 아빠 공통 기준</p>
+    <h1>부모 행동 강령</h1>
+    <p class="lede">우리 집에서 지킬 해라 10가지와 하지 마라 10가지. 논문과 기관 지침, 국내 전문가 의견을 모으고 AI 검증자 셋이 서로 맞춰 봤다.</p>
+    <ul class="meta">
+      <li>2026-10-08 작성</li>
+      <li>출처 236개 검토</li>
+      <li>20개 모두 검증자 3명 통과</li>
+    </ul>
+    <div class="first">
+      <h2>먼저 이것만</h2>
+      <ol>
+        <li>엄마든 아빠든 같은 말을 하고 똑같이 대한다.</li>
+        <li>감정은 받아 주고 행동은 짧게 막는다. 떼쓴다고 결정을 바꾸지 않는다.</li>
+        <li>때리기, 소리 지르기, 겁주기는 하지 않는다.</li>
+      </ol>
+    </div>
+  </header>
+
+  <nav class="jump" aria-label="바로 가기">
+    <ul>
+      <li><a href="#day">하루 지도</a></li>
+      <li><a href="#do">해라</a></li>
+      <li><a href="#dont">하지 마라</a></li>
+      <li><a href="#more">더 지킬 것</a></li>
+      <li><a href="#tantrum">떼쓸 때 순서</a></li>
+      <li><a href="#doctor">상담 기준</a></li>
+      <li><a href="#check">검증 방법</a></li>
+    </ul>
+  </nav>
+
+  <!-- Daily map -->
+  <section class="block" id="day">
+    <div class="block-head">
+      <h2>하루 지도</h2>
+      <p>장면별로 떠올릴 항목을 모았다. 누르면 그 항목으로 간다.</p>
+    </div>
+    <div class="day">
+      <div class="slot"><span class="when">아침</span><h3>등원 준비</h3>
+        <div class="chips"><a class="chip d" href="#d7">O 스스로 하기</a><a class="chip d" href="#d10">O 카시트</a><a class="chip x" href="#x3">X 겁주기</a></div></div>
+      <div class="slot"><span class="when">하루 다섯 번</span><h3>밥·간식</h3>
+        <div class="chips"><a class="chip d" href="#d1">O 같은 규칙</a><a class="chip x" href="#x9">X 질식 음식</a><a class="chip x" href="#x10">X 영상 밥</a></div></div>
+      <div class="slot"><span class="when">틈날 때마다</span><h3>놀이·집안일</h3>
+        <div class="chips"><a class="chip d" href="#d2">O 말 주고받기</a><a class="chip d" href="#d3">O 표현할 틈</a><a class="chip d" href="#d6">O 바로 칭찬</a><a class="chip d" href="#d8">O 기다림</a></div></div>
+      <div class="slot"><span class="when">하루 몇 번</span><h3>떼·때릴 때</h3>
+        <div class="chips"><a class="chip d" href="#d4">O 떼 받아 주기</a><a class="chip d" href="#d5">O 몸으로 막기</a><a class="chip x" href="#x1">X 체벌</a><a class="chip x" href="#x2">X 고함</a><a class="chip x" href="#x4">X 굴복</a><a class="chip x" href="#x5">X 폰 달래기</a><a class="chip x" href="#x7">X 울음 무시</a></div></div>
+      <div class="slot"><span class="when">저녁</span><h3>목욕·잠</h3>
+        <div class="chips"><a class="chip x" href="#x9">X 욕조</a><a class="chip d" href="#d9">O 잠자리 순서</a></div></div>
+      <div class="slot"><span class="when">늘</span><h3>부부 사이</h3>
+        <div class="chips"><a class="chip d" href="#d1">O 같은 규칙</a><a class="chip x" href="#x6">X 뒤집기</a><a class="chip x" href="#x8">X "아들이라"</a></div></div>
+    </div>
+    <div class="legend"><span class="ld">해라</span><span class="lx">하지 마라</span></div>
+  </section>
+
+  <!-- DO -->
+  <section class="block" id="do">
+    <div class="block-head do-head">
+      <h2>해라 10</h2>
+      <p>한 줄 원칙과 우리 집에서 있을 법한 예시 두 개. 중요하고 자주 쓰는 것부터 놓았다.</p>
+    </div>
+    <ol class="rules">
+
+      <li class="rule do" id="d1"><div class="num">1</div><div class="body">
+        <div class="tags"><span class="tag">일관성</span><span class="tag mine">내 초안 반영</span></div>
+        <h3>부부가 규칙 몇 개를 정해 두고, 누가 있든 똑같이 대한다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>카시트에서 몸을 젖히며 버틴다. 엄마 차든 아빠 차든 "카시트에 앉아야 출발해." 울어도 벨트를 매기 전엔 출발하지 않는다.</span></li>
+          <li><span>예 2</span><span>밥 먹다 숟가락을 던진다. 엄마든 아빠든 "던지면 숟가락 치울게." 또 던지면 조용히 치운다. 계속 던지면 "다 먹었구나" 하고 식사를 끝낸다. 할머니께도 미리 알려 둔다.</span></li>
+        </ul>
+        <p class="note">규칙은 적게, 안전과 때리기, 던지기부터 정한다. 초안의 "어린이집은 아빠 차, 자전거는 안 돼"는 하루 순서 이야기에 더 가까워서 예비 항목으로 옮겼다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/family-life/family-dynamics/communication-discipline/Pages/Disciplining-Your-Child.aspx" target="_blank" rel="noopener">AAP, 배우자·가족·보육교사와 기본 규칙 맞추기</a></li>
+          <li><a href="https://doi.org/10.1007/s10802-007-9201-9" target="_blank" rel="noopener">Kaminski 외 2008, 부모교육 77편 메타분석. 일관성을 가르친 프로그램 효과가 더 큼</a></li>
+          <li><a href="https://doi.org/10.1037/a0020837" target="_blank" rel="noopener">Feinberg 외 2010, 공동양육 프로그램 RCT</a></li>
+          <li><a href="https://sports.khan.co.kr/article/202311011637003" target="_blank" rel="noopener">하정훈, 양육자 권위와 규칙·한계 세우기</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule do" id="d2"><div class="num">2</div><div class="body">
+        <div class="tags"><span class="tag">언어</span></div>
+        <h3>아이가 신호를 보내면 바로 받아 주고, 한 단어 붙여 말을 주고받는다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>창밖 버스를 보며 "어! 어!" 하면 "버스 왔네. 파란 버스." 하고 5초쯤 기다린다. 또 소리 내면 한 번 더 받아 준다.</span></li>
+          <li><span>예 2</span><span>그림책에서 "멍멍!" 하면 "멍멍이네. 큰 멍멍이." 글은 다 안 읽어도 된다. "사과 어딨어?" 묻고 가리키기를 기다린다.</span></li>
+        </ul>
+        <p class="note">말을 많이 들려주기보다 많이 주고받기. 아이가 한 번 하면 부모도 한 번 한다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src">전문가</span><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1542/peds.2017-4276" target="_blank" rel="noopener">Gilkerson 외 2018, 18~24개월 대화 주고받기 수가 9~14세 언어·IQ와 연관</a></li>
+          <li><a href="https://doi.org/10.1111/cdev.13225" target="_blank" rel="noopener">Dowdall 외 2020, 그림책 함께 읽기 RCT 메타분석</a></li>
+          <li><a href="https://www.cdc.gov/act-early/milestones/2-years.html" target="_blank" rel="noopener">CDC 2세 이정표, 아이 말에 단어 덧붙이기 권고</a></li>
+          <li>국내 전문가 원문 의견은 찾지 못했다</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule do" id="d3"><div class="num">3</div><div class="body">
+        <div class="tags"><span class="tag">언어·자율</span><span class="tag mine">내 초안 반영</span></div>
+        <h3>원하는 걸 먼저 해 주지 말고 5~10초 기다려 표현할 틈을 준다. 신호가 오면 바로 들어준다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>비눗방울을 몇 번 불다 멈추고 눈을 맞춘 채 기다린다. 손을 뻗거나 "어!" 하면 "더? 비눗방울 또!" 하고 바로 분다. 말을 안 해도 분다.</span></li>
+          <li><span>예 2</span><span>좋아하는 블록을 아이가 못 여는 투명 통에 넣어 둔다. 통을 내밀면 "열어 줄까?" 하고 연다. 짜증이 올라오면 연습을 멈추고 돕는다.</span></li>
+        </ul>
+        <p class="note">목마르거나 배고플 때는 기다리게 하지 않는다. 그래서 초안의 물 예시를 비눗방울로 바꿨다. "말해야 줄 거야" 같은 조건도 걸지 않는다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://hanen.org/information-tips/waiting-the-key-to-supporting-your-childs-communication" target="_blank" rel="noopener">Hanen Centre, 최대 10초 기다리기</a></li>
+          <li><a href="https://www.leicspart.nhs.uk/wp-content/uploads/2019/02/Creating-Opportunities-for-Communication.pdf" target="_blank" rel="noopener">영국 NHS 언어치료, 투명 통·손 닿지 않는 곳에 두기</a></li>
+          <li><a href="https://doi.org/10.1177/0963721414522813" target="_blank" rel="noopener">Tamis-LeMonda 외 2014, 신호에 즉시 반응할 때 단어 학습이 빠름</a></li>
+          <li>기다리기 중재의 RCT는 언어지연 아동 대상이다. 일반 아동에게는 외삽이다</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule do" id="d4"><div class="num">4</div><div class="body">
+        <div class="tags"><span class="tag">떼·감정</span></div>
+        <h3>떼를 쓰면 감정은 이름 붙여 받아 주고, 요구는 바꾸지 않고, 곁에서 기다린다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>놀이터에서 집에 가자니 운다. "더 놀고 싶었구나. 속상하지. 그래도 집에 가." 안아서 데려간다.</span></li>
+          <li><span>예 2</span><span>마트 바닥에 드러누우면 안전한 곳으로 옮기고 곁에 앉는다. "속상하구나. 안아 줄까? 엄마 여기 있어." 안기려 하면 바로 안아 준다. 밀어내면 곁에서 기다린다. 장난감은 안 산다.</span></li>
+        </ul>
+        <p class="note">울음을 그쳐야 안아 주는 게 아니다. 마음은 받아 주되 요구는 들어주지 않는다. 화가 한창일 때 말을 걸면 떼가 길어진다는 연구도 있으니, 그럴 땐 말없이 곁에 있는다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1016/j.brat.2021.104016" target="_blank" rel="noopener">Havighurst 외 2021, 18~36개월 감정코칭 RCT. 아이 행동·스트레스 호르몬 개선</a></li>
+          <li><a href="https://www.zerotothree.org/resource/toddler-tantrums-101-why-they-happen-and-what-you-can-do/" target="_blank" rel="noopener">Zero to Three, 떼 중에도 위로를 건네기</a></li>
+          <li><a href="https://ebook-product.kyobobook.co.kr/dig/epd/ebook/E000003086351" target="_blank" rel="noopener">오은영, 『어떻게 말해줘야 할까』. 감정을 수긍한 뒤 분명히 가르치기</a></li>
+          <li><a href="https://ebook-product.kyobobook.co.kr/dig/epd/ebook/E000005252732" target="_blank" rel="noopener">조선미, 『조선미의 현실 육아 상담소』. 마음은 읽되 요구 수용은 부모가 정함</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule do" id="d5"><div class="num">5</div><div class="body">
+        <div class="tags"><span class="tag">떼·안전</span></div>
+        <h3>때리기·위험한 행동은 말보다 몸으로 먼저 막고, 짧게 "안 돼" 한 뒤 대신 할 행동을 보여 준다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>엄마 얼굴을 때린다. 손을 잡아 막고 낮은 목소리로 "때리면 아파." 이어서 "화나면 발 쿵쿵 해."</span></li>
+          <li><span>예 2</span><span>정수기 온수 버튼에 손을 뻗는다. 손부터 잡고 "뜨거워. 안 돼. 찬물은 아빠랑 같이 받자."</span></li>
+        </ul>
+        <p class="note">때리기, 물기, 던지기는 못 본 척 넘기지 않는다. 이 나이에는 설명해도 잘 못 알아들으니 말은 한두 마디면 된다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/family-life/family-dynamics/communication-discipline/Pages/Temper-Tantrums.aspx" target="_blank" rel="noopener">AAP, 때리기·물기·던지기는 즉시 개입</a></li>
+          <li><a href="https://www.zerotothree.org/resource/toddlers-and-challenging-behavior/" target="_blank" rel="noopener">Zero to Three, "때리면 아파" 뒤 화를 낼 다른 방법 보여 주기(2~3세 기준)</a></li>
+          <li><a href="https://doi.org/10.1542/peds.2018-3112" target="_blank" rel="noopener">AAP 2018 훈육 정책, 다른 할 거리로 돌리기</a></li>
+          <li><a href="https://tenasia.hankyung.com/tv/article/2023021575094" target="_blank" rel="noopener">오은영 방송 발언, 겁주지 말고 "그럼 안 돼"로 충분(기사)</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule do" id="d6"><div class="num">6</div><div class="body">
+        <div class="tags"><span class="tag">칭찬</span></div>
+        <h3>잘한 행동은 그 자리에서 바로 말해 준다. 무엇을 했는지 한마디 붙인다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>던지던 공을 바구니에 넣는다. "바구니에 쏙 넣었네. 그렇게 하는 거야."</span></li>
+          <li><span>예 2</span><span>모자를 몇 번 놓치다 혼자 쓴다. "계속 해 보더니 혼자 썼네."</span></li>
+        </ul>
+        <p class="note">칭찬은 그 자리에서 해야 한다. 혼내는 것보다 잘한 순간을 알아주는 쪽이 문제 행동을 더 줄인다. 스스로 돕거나 정리한 일에는 스티커·장난감 대신 "고마워"로 알아준다. 음식은 상으로 쓰지 않는다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src">전문가</span><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1016/j.jaac.2018.07.900" target="_blank" rel="noopener">Leijten 외 2019, 부모교육 RCT 154편. 칭찬·긍정 강화가 핵심 요소</a></li>
+          <li><a href="https://doi.org/10.1111/cdev.12064" target="_blank" rel="noopener">Gunderson 외 2013, 14~38개월 과정 칭찬과 7~8세 성장 마인드셋(53명, 상관)</a></li>
+          <li><a href="https://www.cdc.gov/child-development/positive-parenting-tips/toddlers-1-2-years.html" target="_blank" rel="noopener">CDC 1~2세 팁, 벌보다 원하는 행동에 더 반응하기</a></li>
+          <li>3~9세 실험에서 구체적 칭찬이 일반 칭찬보다 더 낫지는 않았다(Leijten 2016)</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule do" id="d7"><div class="num">7</div><div class="body">
+        <div class="tags"><span class="tag">자율</span><span class="tag mine">내 초안 반영</span></div>
+        <h3>스스로 할 시간을 주고, 혼자 못 하는 부분만 돕는다. 마지막 동작은 아이가 하고, 실패해도 다시 해 보게 한다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>등원 준비를 5분 일찍 시작한다. 신발 벨크로를 혼자 붙이려 하면 "엄마가 기다릴게." 안 되면 "끝만 잡아 줄게. 붙이는 건 네가 해."</span></li>
+          <li><span>예 2</span><span>컵으로 마시다 쏟는다. "쏟았네. 같이 닦자. 다시 해 볼까?" 다음엔 물을 조금만 담아 준다.</span></li>
+        </ul>
+        <p class="note">이 나이에는 신발이나 옷을 혼자 다 입지 못한다. 앞부분은 부모가 하고 마지막 한 동작만 아이에게 맡긴다. 뜨거운 것, 높은 곳은 처음부터 부모가 한다. 바쁘다고 "이리 줘, 해 줄게"를 매일 하지 않는다. 평일 아침엔 한 가지만 맡기고 주말에 더 맡긴다. 흘리거나 실수해도 혼내지 않는다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1111/j.1467-8624.2009.01397.x" target="_blank" rel="noopener">Bernier 외 2010, 자율성 지지가 18·26개월 실행기능을 예측</a></li>
+          <li><a href="https://doi.org/10.1126/science.aan2317" target="_blank" rel="noopener">Leonard 외 2017(Science), 어른이 다시 시도하는 걸 본 15개월이 더 오래 시도</a></li>
+          <li><a href="https://developingchild.harvard.edu/wp-content/uploads/2024/10/Executive-Function-Activities-for-18-to-36-month-olds.pdf" target="_blank" rel="noopener">Harvard 아동발달센터, 18~36개월 실행기능 놀이</a></li>
+          <li><a href="https://www.huffingtonpost.kr/article/258342" target="_blank" rel="noopener">조선미, "아이의 머리와 손발이 되어주지 말라"(『영혼이 강한 아이로 키워라』)</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule do" id="d8"><div class="num">8</div><div class="body">
+        <div class="tags"><span class="tag">기다림</span><span class="tag mine">내 초안 반영</span></div>
+        <h3>기다림은 30초~1분에서 시작하고, 끝이 보이게 하고, 기다리는 동안 할 일을 준다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>"양말 세 개만 널고 나가자. 하나, 둘, 셋 같이 세자." 집게를 하나씩 건네게 한다. 다 널면 바로 나간다.</span></li>
+          <li><span>예 2</span><span>간식 앞에서 "엄마 바나나 까서 나누는 동안 접시 잡고 있어." 손으로 떼면서 "하나. 둘." 다 되면 "기다려 줘서 고마워" 하고 바로 준다.</span></li>
+        </ul>
+        <p class="note">초안의 "빨래 널고 나가서 놀자"는 방향은 맞는데, 한 바구니를 다 널 때까지는 너무 길어서 세 개로 줄였다. 다 널면 바로 나간다. 약속은 꼭 지킨다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1037/a0023813" target="_blank" rel="noopener">Cole 외 2011, 18·24개월은 약 1분 만에 짜증, 스스로 관심 돌리기는 약 2.5분</a></li>
+          <li><a href="https://bps.org.uk/research-digest/what-happened-when-psychologists-gave-toddlers-version-classic-marshmallow-test" target="_blank" rel="noopener">Białecka-Pikul 외 2018, 18개월 60초 성공 23%, 24개월 90초 성공 55%(보도 수치)</a></li>
+          <li><a href="https://www.zerotothree.org/resource/limits-for-little-ones/" target="_blank" rel="noopener">Zero to Three, 타이머·할 거리 주기</a></li>
+          <li>기다림 연습의 장기 효과를 이 월령에서 보인 RCT는 없다. 효과를 부풀리지 않는다</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule do" id="d9"><div class="num">9</div><div class="body">
+        <div class="tags"><span class="tag">수면</span></div>
+        <h3>잠자리는 매일 같은 순서, 같은 시각으로 한다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>8시 반에 씻기, 양치, 책 두 권, 불 끄고 자장가. 엄마가 재우든 아빠가 재우든 순서는 같다.</span></li>
+          <li><span>예 2</span><span>늦게 귀가한 날도 "오늘은 책 한 권만." 줄이되 순서는 지킨다. 주말에도 기상 시각을 크게 바꾸지 않는다.</span></li>
+        </ul>
+        <p class="note">권장 수면은 낮잠 포함 하루 11~14시간. 자기 전 1시간은 화면을 끄고, 침실에는 TV·태블릿을 두지 않는다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1093/sleep/32.5.599" target="_blank" rel="noopener">Mindell 외 2009, 잠자리 루틴 RCT(18~36개월군 포함). 3주 만에 잠드는 시간·밤중 깸 감소</a></li>
+          <li><a href="https://depts.washington.edu/dbpeds/pediatricsleepdurationconsensus.pdf" target="_blank" rel="noopener">미국수면의학회 2016 합의문, 1~2세 11~14시간</a></li>
+          <li><a href="https://www.who.int/news/item/24-04-2019-to-grow-up-healthy-children-need-to-sit-less-and-play-more" target="_blank" rel="noopener">WHO 2019, 규칙적인 수면·기상 시각</a></li>
+          <li><a href="https://www.donga.com/news/Opinion/article/all/20250105/130793636/2" target="_blank" rel="noopener">오은영 2025 칼럼, 루틴 구성은 집마다 달라도 매일 반복이 중요</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule do" id="d10"><div class="num">10</div><div class="body">
+        <div class="tags"><span class="tag">안전</span></div>
+        <h3>위험은 말보다 환경으로 먼저 막고, 카시트는 가까운 거리도 매번 태운다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>부부가 무릎 높이로 집을 한 바퀴 돈다. 서랍장·TV는 벽에 고정, 전기밥솥·가열식 가습기는 손 안 닿게, 정수기는 온수 잠금. 약·세제·버튼전지·자석은 잠금장에.</span></li>
+          <li><span>예 2</span><span>"5분 거리니까 안고 타자"를 하지 않는다. 할머니 차에도 카시트를 단다. 뒷좌석에 카시트 한도까지 뒤보기. 두꺼운 패딩은 벗기고 벨트를 맨 뒤 위에 덮어 준다.</span></li>
+        </ul>
+        <p class="note">1~3세 안전사고의 약 4분의 3이 집 안에서 난다. 6세 미만은 카시트를 법으로 꼭 써야 한다.</p>
+        <div class="evidence"><span class="src">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="src on">법령</span><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/safety-prevention/on-the-go/Pages/Car-Safety-Seats-Information-for-Families.aspx" target="_blank" rel="noopener">AAP 2026, 카시트 한도까지 뒤보기·13세 미만 뒷좌석</a></li>
+          <li><a href="https://www.korea.kr/news/policyNewsView.do?newsId=148929742" target="_blank" rel="noopener">공정위·한국소비자원 2024, 고온물질 화상의 58%가 걸음마기</a></li>
+          <li><a href="https://www.healthychildren.org/English/ages-stages/toddler/Pages/safety-for-your-child-1-to-2-years.aspx" target="_blank" rel="noopener">AAP, 1~2세 안전 지침</a></li>
+          <li>도로교통법 제50조 제1항, 6세 미만 유아보호용 장구</li>
+        </ul></details>
+      </div></li>
+    </ol>
+  </section>
+
+  <!-- DON'T -->
+  <section class="block" id="dont">
+    <div class="block-head dont-head">
+      <h2>하지 마라 10</h2>
+      <p>한 줄 원칙과 흔히 하는 실수 두 개, 그 자리에서 대신 할 말.</p>
+    </div>
+    <ol class="rules">
+
+      <li class="rule dont" id="x1"><div class="num">1</div><div class="body">
+        <div class="tags"><span class="tag">훈육</span></div>
+        <h3>때리지 않는다. "살짝", "손등만"도 포함</h3>
+        <ul class="lines slip">
+          <li><span>실수</span><span>친구를 때리자 손등을 탁 치며 "너도 맞아 봐야 알지."</span></li>
+          <li><span>실수</span><span>기저귀 갈 때 발로 차자 허벅지를 탁 친다. 엄마를 물자 "얼마나 아픈지 알아?" 하며 같이 문다.</span></li>
+        </ul>
+        <p class="instead"><span>대신</span><span>손을 잡아 멈추고 "때리면 아파. 손은 이렇게." 쓰다듬는 걸 보여 준다.</span></p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="src on">법령</span><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1037/fam0000191" target="_blank" rel="noopener">Gershoff·Grogan-Kaylor 2016, 16만 명 메타분석. 엉덩이 때리기도 해로운 방향</a></li>
+          <li><a href="https://doi.org/10.1542/peds.2018-3112" target="_blank" rel="noopener">AAP 2018, 체벌은 단기 효과 적고 장기 효과 없음</a></li>
+          <li><a href="https://v.daum.net/v/20230725200101952" target="_blank" rel="noopener">오은영 인터뷰, 때리지 않고 훈육할 수 있다</a></li>
+          <li>민법 제915조 징계권 삭제(2021.1.26 시행), 아동복지법 제5조 제2항</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule dont" id="x2"><div class="num">2</div><div class="body">
+        <div class="tags"><span class="tag">훈육</span></div>
+        <h3>소리 지르거나 창피 주지 않는다</h3>
+        <ul class="lines slip">
+          <li><span>실수</span><span>우유를 쏟자 "아 진짜! 또 쏟았어? 왜 이렇게 말을 안 들어!"</span></li>
+          <li><span>실수</span><span>다른 사람 앞에서 "얘는 맨날 이래요. 고집이 얼마나 센지." 식당에서 "울보야?"</span></li>
+        </ul>
+        <p class="instead"><span>대신</span><span>아이가 안전한지 확인하고 숨을 다섯 번 쉰다. 그다음 "쏟았네. 걸레 가져오자."</span></p>
+        <p class="note">차도로 뛰어들 때 "멈춰!"는 경고라서 해당하지 않는다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="src on">법령</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1542/peds.2018-3112" target="_blank" rel="noopener">AAP 2018, 소리 지르기·창피 주기도 체벌과 같은 범주</a></li>
+          <li><a href="https://doi.org/10.1111/1467-8624.00209" target="_blank" rel="noopener">Kelley 외 2000, 24개월 때 부정적 평가가 36개월 수치심과 연관</a></li>
+          <li><a href="https://www.unicef.org/thailand/parenting-hub/how-to-discipline-your-child-the-smart-and-healthy-way" target="_blank" rel="noopener">UNICEF, 화가 치밀면 숨 다섯 번</a></li>
+          <li>1~3세 연구에서는 언어적 처벌의 장기 영향이 뚜렷하지 않았다(Berlin 2009). 그래서 근거는 중으로 둔다</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule dont" id="x3"><div class="num">3</div><div class="body">
+        <div class="tags"><span class="tag">훈육</span></div>
+        <h3>겁주는 협박이나 지키지 못할 협박을 하지 않는다</h3>
+        <ul class="lines slip">
+          <li><span>실수</span><span>"안 가면 엄마 혼자 간다, 안녕!" 하고 걸어가는 척한다.</span></li>
+          <li><span>실수</span><span>"계속 울면 경찰 아저씨가 잡아간다." "망태 할아버지 온다."</span></li>
+        </ul>
+        <p class="instead"><span>대신</span><span>실제로 할 일을 한 번 말하고 한다. "지금 안 가면 아빠가 안고 갈 거야." 그리고 안고 간다.</span></p>
+        <div class="evidence"><span class="src">논문</span><span class="src on">기관</span><span class="src">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.who.int/news-room/fact-sheets/detail/corporal-punishment-and-health" target="_blank" rel="noopener">WHO, 위협·겁주기는 체벌과 겹치는 잔혹하고 굴욕적인 처벌</a></li>
+          <li><a href="https://www.cdc.gov/parenting-toddlers/responding-to-behavior/index.html" target="_blank" rel="noopener">CDC, 경고했으면 반드시 실행(2~4세 기준)</a></li>
+          <li>18~24개월을 직접 본 연구는 없다</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule dont" id="x4"><div class="num">4</div><div class="body">
+        <div class="tags"><span class="tag">떼·일관성</span></div>
+        <h3>떼쓴다고 "안 돼"를 "돼"로 바꾸지 않는다</h3>
+        <ul class="lines slip">
+          <li><span>실수</span><span>마트에서 10분 버티다 "알았어, 이번만이야." 하고 사 준다.</span></li>
+          <li><span>실수</span><span>안 된다던 과자를 울음이 커지자 결국 준다.</span></li>
+        </ul>
+        <p class="instead"><span>대신</span><span>들어줄 거면 울기 전에 들어준다. "안 돼"는 지킬 수 있는 것에만 쓰고 끝까지 지킨다.</span></p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1017/s0954579414000169" target="_blank" rel="noopener">Smith 외 2014, 2세부터 강압적 주고받기가 불순응을 키움</a></li>
+          <li><a href="https://www.cdc.gov/parenting-toddlers/discipline-consequences/ignoring.html" target="_blank" rel="noopener">CDC, 버티다 굴복하면 더 심하게 해야 얻는다고 배움</a></li>
+          <li><a href="https://www.zerotothree.org/resource/limits-for-little-ones/" target="_blank" rel="noopener">Zero to Three, 들어줄 거면 바로, 안 되면 하루 종일 안 됨</a></li>
+          <li>AAP는 "가끔 조금 양보해도 괜찮다"고도 쓴다. 그래서 "안 돼"를 지킬 수 있는 것에만 쓴다</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule dont" id="x5"><div class="num">5</div><div class="body">
+        <div class="tags"><span class="tag">미디어</span></div>
+        <h3>울음을 멈추려고 휴대폰·영상을 쥐여 주지 않는다</h3>
+        <ul class="lines slip">
+          <li><span>실수</span><span>식당에서 칭얼대자 바로 유튜브를 튼다.</span></li>
+          <li><span>실수</span><span>마트에서 버티다 "그럼 딱 5분만" 하고 폰을 꺼낸다.</span></li>
+        </ul>
+        <p class="instead"><span>대신</span><span>자리를 옮겨 안고 "속상했구나." 창밖 버스 찾기로 돌린다. 외출 가방에 보드북 한두 권과 손바닥만 한 장난감을 챙긴다.</span></p>
+        <p class="note">스티커는 아이들이 자주 삼키는 물건이라 넣지 않았다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1001/jamapediatrics.2022.4793" target="_blank" rel="noopener">Radesky 외 2023, 기기로 달래기와 이후 감정 반응성(3~5세, 남아에서 유의)</a></li>
+          <li><a href="https://doi.org/10.1542/peds.2025-075320" target="_blank" rel="noopener">AAP 2026 디지털 정책, 화면으로 달래기는 자기조절 발달 우려</a></li>
+          <li><a href="http://news.donga.com/3/all/20160308/76870590/1" target="_blank" rel="noopener">오은영 2016 칼럼, "딱 5분만" 대신 기다려 본 경험 쌓기(6세 사례)</a></li>
+          <li>핵심 연구가 3~5세 대상이라 18~24개월은 외삽이다</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule dont" id="x6"><div class="num">6</div><div class="body">
+        <div class="tags"><span class="tag">일관성</span></div>
+        <h3>배우자의 결정을 아이 앞에서 뒤집거나 깎아내리지 않는다</h3>
+        <ul class="lines slip">
+          <li><span>실수</span><span>엄마가 "과자는 저녁 먹고"라고 했는데 아빠가 "한 개만 줘. 애가 우는데."</span></li>
+          <li><span>실수</span><span>"아빠가 너무하지? 엄마랑 하자."</span></li>
+        </ul>
+        <p class="instead"><span>대신</span><span>"과자는 저녁 먹고. 아빠도 똑같아." 생각이 다르면 아이 없을 때 맞춘다. 때리기·위험한 결정만은 그 자리에서 멈춘다.</span></p>
+        <p class="note">당장 정해야 하면 "엄마랑 아빠가 잠깐 이야기할게" 하고 멈춘다. 조부모에게도 같은 기준을 미리 알려 둔다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1007/s11121-013-0366-x" target="_blank" rel="noopener">Solmeyer 외 2014, 공동양육 RCT. 경쟁 감소가 3세 적응 개선의 39~55% 설명</a></li>
+          <li><a href="https://doi.org/10.1037/0893-3200.15.3.526" target="_blank" rel="noopener">Schoppe 외 2001, 깎아내리는 공동양육과 이후 문제 행동</a></li>
+          <li><a href="https://www.zerotothree.org/resource/how-to-find-harmony-when-parents-disagree" target="_blank" rel="noopener">Zero to Three, "엄마 아빠가 잠깐 머리를 맞대 볼게"</a></li>
+          <li>부모 의견이 다른 것 자체는 문제가 아니다. 아이 앞의 뒤집기와 편 가르기가 문제다</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule dont" id="x7"><div class="num">7</div><div class="body">
+        <div class="tags"><span class="tag">감정</span></div>
+        <h3>우는 감정을 무시하거나 다그치지 않는다. "남자가 왜 울어"도 포함</h3>
+        <ul class="lines slip">
+          <li><span>실수</span><span>넘어져 울면 "안 아파, 뚝! 그만 울어."</span></li>
+          <li><span>실수</span><span>"이게 울 일이야?" "남자가 왜 울어."</span></li>
+        </ul>
+        <p class="instead"><span>대신</span><span>"아팠구나." "깜짝 놀랐구나." 짧게 말하고 안아 준 뒤 다음 놀이로 넘어간다.</span></p>
+        <p class="note">남자아이라고 덜 울어야 한다는 근거는 없다. "속상해", "무서워" 같은 말을 배워야 나중에 화를 덜 낸다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1016/j.brat.2021.104016" target="_blank" rel="noopener">Havighurst 외 2021, 감정 무시를 줄인 18~36개월 RCT</a></li>
+          <li><a href="https://doi.org/10.1111/cdev.12027" target="_blank" rel="noopener">Roben 외 2013, 18개월 언어 능력과 48개월 분노 감소</a></li>
+          <li><a href="https://www.zerotothree.org/resource/toddler-tantrums-101-why-they-happen-and-what-you-can-do/" target="_blank" rel="noopener">Zero to Three, 감정은 존중하고 한계는 지킨다</a></li>
+          <li><a href="https://ebook-product.kyobobook.co.kr/dig/epd/ebook/E000003086351" target="_blank" rel="noopener">오은영, 먼저 듣고 감정을 수긍하기</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule dont" id="x8"><div class="num">8</div><div class="body">
+        <div class="tags"><span class="tag">언어 발달</span></div>
+        <h3>말이 늦은데 "아들이라 원래 늦다"며 기다리기만 하지 않는다</h3>
+        <ul class="lines slip">
+          <li><span>실수</span><span>"남자애들은 원래 늦어. 세 돌까지 두고 보자."</span></li>
+          <li><span>실수</span><span>영유아검진에서 '추적검사 요망'을 듣고 넘긴다.</span></li>
+        </ul>
+        <p class="instead"><span>대신</span><span>18개월에 엄마·아빠 말고 단어 3개를 말하려 하지 않거나 손가락으로 가리켜 보여 주지 않으면, 24개월에 두 단어 조합("우유 더")이 없거나 그림책 속 물건을 가리키지 못하면 다음 검진을 기다리지 말고 소아과 상담과 청력검사를 받는다. 하던 말을 잃으면 나이와 상관없이 바로 간다.</span></p>
+        <p class="note">상담을 받는다고 문제가 있다는 뜻은 아니다. 또래보다 말이 늦은 아이는 5명 중 1명꼴이고, 시간이 지나 따라잡기도 한다. 남자아이가 평균적으로 조금 늦긴 하지만 그렇다고 검사를 미룰 이유는 없다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.cdc.gov/act-early/milestones/2-years.html" target="_blank" rel="noopener">CDC 2세 이정표, 하나라도 못 하면 기다리지 말 것</a></li>
+          <li><a href="https://doi.org/10.1044/1092-4388(2007/106)" target="_blank" rel="noopener">Zubrick 외 2007, 24개월 1,766명. 남아는 말 늦음의 예측 요인</a></li>
+          <li><a href="https://doi.org/10.1111/j.2044-835x.2011.02042.x" target="_blank" rel="noopener">Eriksson 외 2012, 10개 언어권 성별 차이는 작음</a></li>
+          <li><a href="https://www.healthychildren.org/English/ages-stages/toddler/Pages/language-delay.aspx" target="_blank" rel="noopener">AAP, 24개월 50~100단어와 두 단어 구</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule dont" id="x9"><div class="num">9</div><div class="body">
+        <div class="tags"><span class="tag">안전</span></div>
+        <h3>욕조에 잠깐이라도 혼자 두거나, 포도·떡 같은 질식 위험 음식을 통째로 주지 않는다</h3>
+        <ul class="lines slip">
+          <li><span>실수</span><span>목욕 의자에 앉혀 두고 "수건 가져올게" 하고 30초 욕실을 나간다.</span></li>
+          <li><span>실수</span><span>포도·방울토마토를 통으로 준다. 어른 간식인 통견과·젤리·인절미를 같이 먹인다.</span></li>
+        </ul>
+        <p class="instead"><span>대신</span><span>목욕 전에 수건·옷을 챙기고 팔 닿는 거리를 지킨다. 자리를 떠야 하면 아이를 안고 나간다. 포도·방울토마토는 세로로 자른 뒤 다시 잘게 썬다. 다른 음식은 1.3cm 이하로 자른다. 통견과·알사탕·젤리·찹쌀떡·인절미는 주지 않는다. 부드러운 떡만 아주 작게 잘라 앉아서 먹을 때 준다.</span></p>
+        <p class="note">아이는 물 2~5cm에서도 소리 없이 빠질 수 있다. 목욕 의자에 앉혀도 눈을 떼면 안 된다. 위험한 음식은 AAP는 4세, 영국 NHS는 5세까지 피하라고 한다.</p>
+        <div class="evidence"><span class="src">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1542/peds.2019-0850" target="_blank" rel="noopener">AAP 2019 익수 예방 정책, 팔 닿는 거리의 터치 감독</a></li>
+          <li><a href="https://www.healthychildren.org/English/health-issues/injuries-emergencies/Pages/Choking-Prevention.aspx" target="_blank" rel="noopener">AAP 2026, 질식 예방. 반 인치 이하, 포도는 세로로 자른 뒤 잘게</a></li>
+          <li><a href="https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=5481" target="_blank" rel="noopener">질병관리청 국가건강정보포털, 가정 내 아동안전</a></li>
+          <li>하정훈, 목욕 중 잠시라도 자리 비우지 않기, 어묵 등 큰 덩어리 금지</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule dont" id="x10"><div class="num">10</div><div class="body">
+        <div class="tags"><span class="tag">식사·미디어</span></div>
+        <h3>영상을 틀어 놓고 먹이거나, 돌아다니는 아이를 쫓아다니며 먹이지 않는다</h3>
+        <ul class="lines slip">
+          <li><span>실수</span><span>"유튜브 보면서 한 입만. 아~"</span></li>
+          <li><span>실수</span><span>거실을 뛰어다니는 아이를 따라다니며 숟가락을 내민다.</span></li>
+        </ul>
+        <p class="instead"><span>대신</span><span>영상을 끄고 식탁 의자에 앉힌다. 내려가겠다고 하면 "다 먹었구나" 하고 식사를 끝낸다. 다음 간식 때까지 물만 준다.</span></p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/health-issues/injuries-emergencies/Pages/Choking-Prevention.aspx" target="_blank" rel="noopener">AAP, 음식을 입에 문 채 뛰거나 놀지 않게(질식은 3세 이하에서 가장 흔함)</a></li>
+          <li><a href="https://doi.org/10.5720/kjcn.2023.28.3.206" target="_blank" rel="noopener">한윤희 외 2023, 국내 3~5세 식사 중 미디어와 편식·스스로 먹기 감소</a></li>
+          <li><a href="https://www.ellynsatterinstitute.org/wp-content/uploads/2023/09/sDOR-in-feedng.pdf" target="_blank" rel="noopener">Satter, 언제·어디서는 부모, 얼마나는 아이</a></li>
+          <li>하정훈, 식사는 앉아서, 식탁 의자 안전벨트</li>
+        </ul></details>
+      </div></li>
+    </ol>
+  </section>
+
+  <!-- RESERVE -->
+  <section class="block" id="more">
+    <div class="block-head">
+      <h2>더 지킬 것 12</h2>
+      <p>검증은 통과했지만 TOP 20에는 넣지 않은 항목이다. 익숙해지면 하나씩 늘려 간다. 몸 놀이가 1순위다.</p>
+    </div>
+    <ol class="rules">
+
+      <li class="rule do" id="r1"><div class="num">O</div><div class="body">
+        <div class="tags"><span class="tag">식사</span><span class="tag">예비</span></div>
+        <h3>식사 시간·자리는 부모가 정하고, 먹을지·얼마나 먹을지는 아이가 정한다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>세 끼와 간식 두 번을 정한 시간에 식탁 의자에서 준다. 그 사이엔 물만 준다. "배고프면 간식 시간에 먹자."</span></li>
+          <li><span>예 2</span><span>숟가락을 쥐여 주고 흘려도 둔다. 다 먹었다고 하면 더 권하지 않는다.</span></li>
+        </ul>
+        <p class="note">체중이 잘 늘지 않는 아이는 소아과 지도가 먼저다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.ellynsatterinstitute.org/wp-content/uploads/2023/09/sDOR-in-feedng.pdf" target="_blank" rel="noopener">Satter, 식사의 역할 나누기</a></li>
+          <li><a href="https://www.healthychildren.org/English/ages-stages/toddler/nutrition/Pages/Picky-Eaters.aspx" target="_blank" rel="noopener">AAP, 편식하는 아이</a></li>
+          <li><a href="https://doi.org/10.1016/j.physbeh.2017.02.015" target="_blank" rel="noopener">Jansen 외 2017, 먹으라는 압박과 편식이 서로 키움</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule do" id="r2"><div class="num">O</div><div class="body">
+        <div class="tags"><span class="tag">일관성</span><span class="tag">예비</span></div>
+        <h3>경고는 한 번만 하고, 말한 결과는 꼭 실행한다. 약속도 지킨다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>놀이터에서 모래를 던진다. "또 던지면 집에 갈 거야." 또 던지면 화내지 않고 안고 나온다.</span></li>
+          <li><span>예 2</span><span>"옷 입으면 비눗방울 하자" 했으면 귀찮아도 실제로 나간다.</span></li>
+        </ul>
+        <p class="note">지킬 수 없는 경고는 처음부터 하지 않는다.</p>
+        <div class="evidence"><span class="src">논문</span><span class="src on">기관</span><span class="src">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.cdc.gov/parenting-toddlers/responding-to-behavior/index.html" target="_blank" rel="noopener">CDC, 말한 것은 실행하기(2~4세 기준)</a></li>
+          <li><a href="https://www.zerotothree.org/resource/limits-for-little-ones/" target="_blank" rel="noopener">Zero to Three, 안 되면 하루 종일 안 됨</a></li>
+          <li><a href="https://www.unicef.org/thailand/parenting-hub/how-to-discipline-your-child-the-smart-and-healthy-way" target="_blank" rel="noopener">UNICEF, 결과는 화내지 않고 차분히 실행</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule do" id="r3"><div class="num">O</div><div class="body">
+        <div class="tags"><span class="tag">루틴</span><span class="tag">예비</span><span class="tag mine">내 초안 반영</span></div>
+        <h3>하루 순서를 같게 두고, 다음 활동을 미리 알려 준다. 알린 뒤에는 그대로 넘어간다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>등원은 옷, 양치, 신발, 카시트 순서. "신발 노래 나오면 신발 신자." 평일 등원은 차, 자전거는 하원 뒤나 주말에, 헬멧 쓰고 유아 안장에.</span></li>
+          <li><span>예 2</span><span>"미끄럼 두 번만 더 타고 집에 가자." 손가락 두 개를 보여 준다. "하나… 둘. 이제 가자." 안 오면 안아서 간다.</span></li>
+        </ul>
+        <p class="note">미리 알리기만 하고 안 따르면 효과가 없다. 알린 대로 실제로 넘어가야 한다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src">전문가</span><span class="src on">법령</span><span class="strength">근거 약~중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1901/jaba.2005.143-04" target="_blank" rel="noopener">Cote 외 2005, 14~22개월. 예고만으로는 효과 없고 실행이 함께 있어야 함(소수 아동)</a></li>
+          <li><a href="https://www.cdc.gov/parenting-toddlers/structure-rules/index.html" target="_blank" rel="noopener">CDC, 루틴과 예측 가능성</a></li>
+          <li>도로교통법 제50조 제4항, 자전거 동승자 보호 장구</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule do" id="e2"><div class="num">O</div><div class="body">
+        <div class="tags"><span class="tag">몸 놀이</span><span class="tag">예비</span></div>
+        <h3>하루 합쳐 3시간은 몸을 움직이게 하고, 유모차·식탁 의자·아기띠·포대기에 한 번에 1시간 넘게 묶어 두지 않는다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>비 오는 날은 거실에 매트를 깔고 쿠션 산 넘기, 공 굴리기를 한다.</span></li>
+          <li><span>예 2</span><span>마트나 카페 외출이 길어지면 중간에 유모차에서 내려 걷게 한다.</span></li>
+        </ul>
+        <p class="note">어린이집, 산책, 집 안 돌아다니기 같은 가벼운 움직임도 3시간에 들어간다. 카시트는 안전이 먼저라 빼지 않고, 장거리 운전은 1시간쯤마다 쉬면서 내려 움직이게 한다. WHO는 강하게 권하지만 근거의 질은 낮다고 밝혔다.</p>
+        <div class="evidence"><span class="src">논문</span><span class="src on">기관</span><span class="src">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.who.int/news/item/24-04-2019-to-grow-up-healthy-children-need-to-sit-less-and-play-more" target="_blank" rel="noopener">WHO 2019, 1~2세 하루 180분 이상 움직이기, 한 번에 1시간 넘게 묶어 두지 않기</a></li>
+          <li>호주·캐나다 정부 지침도 같은 수치다</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule do" id="e1"><div class="num">O</div><div class="body">
+        <div class="tags"><span class="tag">떼 예방</span><span class="tag">예비</span></div>
+        <h3>선택지는 둘 중 하나로 주고, 정해진 일은 선택처럼 묻지 않는다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>목욕을 거부한다. "목욕할래?" 대신 오리와 배를 양손에 들고 "목욕할 시간이야. 어느 거 데려갈래?" 하고 가리키게 한다. 안 고르면 "엄마가 골라 줄게" 하고 하나를 들고 간다.</span></li>
+          <li><span>예 2</span><span>등원 옷은 전날 밤 두 벌만 꺼내 둔다. "파란 티? 공룡 티?" 말이 서툴면 손으로 가리키게 한다.</span></li>
+        </ul>
+        <p class="note">두 개 모두 부모가 괜찮은 것만 고른다. 말로만 물으면 뒤에 들은 것을 고르기 쉬우니 물건을 보여 준다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.cdc.gov/act-early/milestones/18-months.html" target="_blank" rel="noopener">CDC 18개월, 두 가지 중 고르게 하기</a></li>
+          <li><a href="https://www.zerotothree.org/resource/limits-for-little-ones/" target="_blank" rel="noopener">Zero to Three, 선택이 없는 일은 묻지 않기("목욕할 시간이야")</a></li>
+          <li>Sumner 2019, 말로 물으면 어린아이는 뒤에 들은 것을 고르는 경향</li>
+          <li>선택권 자체의 장기 효과 연구는 없다</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule do" id="e3"><div class="num">O</div><div class="body">
+        <div class="tags"><span class="tag">식사</span><span class="tag">예비</span></div>
+        <h3>싫어하는 음식도 조금씩 반복해서 내놓고, 부모가 먼저 맛있게 먹는다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>부드럽게 익혀 잘게 썬 브로콜리 한 조각을 매 끼니 접시 끝에 올린다. "맛볼래?" 한 번만 묻고, 싫다 하면 "안 먹어도 돼. 여기 둘게."</span></li>
+          <li><span>예 2</span><span>아빠가 먼저 먹는다. "아빠는 브로콜리 먹어 볼게. 음, 맛있다." 아이가 만지거나 핥기만 해도 넘어간다.</span></li>
+        </ul>
+        <p class="note">보기만 해서는 효과가 작거나 들쭉날쭉하다. 입에 대 보는 경험이 하루 한 번씩 8~10번 넘게 필요할 수 있다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1093/ajcn/nqy308" target="_blank" rel="noopener">Spill 외 2019, 4~24개월 체계적 문헌고찰. 8~10일 이상 맛보기가 수용도를 높임</a></li>
+          <li><a href="https://doi.org/10.1016/j.appet.2009.08.012" target="_blank" rel="noopener">Houston-Price 외 2009, 21~24개월 그림책 보기 노출(효과 엇갈림)</a></li>
+          <li><a href="https://www.healthychildren.org/English/ages-stages/toddler/nutrition/Pages/Picky-Eaters.aspx" target="_blank" rel="noopener">AAP, 10번 이상 맛봐야 받아들이기도 함</a></li>
+          <li>하정훈, 골고루 주고 기다려 주기</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule do" id="e4"><div class="num">O</div><div class="body">
+        <div class="tags"><span class="tag">미디어</span><span class="tag">예비</span></div>
+        <h3>영상을 보여 준다면 옆에서 같이 보며 말을 건다. 영상통화는 같이 한다</h3>
+        <ul class="lines">
+          <li><span>예 1</span><span>"강아지다. 멍멍! 우리 아파트 강아지랑 똑같네." 끝나면 같이 끈다. "이제 블록 하자."</span></li>
+          <li><span>예 2</span><span>할머니와 영상통화는 같이 한다. "할머니한테 빠이빠이 해 볼까?" 아이 혼자 폰을 들고 있게 두지 않는다.</span></li>
+        </ul>
+        <p class="note">CDC는 2세 미만에게 영상통화 말고는 화면을 권하지 않고, WHO도 1세에게는 권하지 않는다. 하정훈도 두 돌까지 TV를 보지 말라고 한다. AAP 2026은 시간 수치 대신 함께 보기와 내용의 질을 본다. 보여 줄지는 부부가 먼저 정한다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1001/jamapediatrics.2020.0327" target="_blank" rel="noopener">Madigan 외 2020 메타분석, 함께 보기는 언어와 양의 관련(12세 이하 전체, 상관)</a></li>
+          <li><a href="https://www.cdc.gov/act-early/milestones/18-months.html" target="_blank" rel="noopener">CDC 18개월, 영상통화 외 화면 제한</a></li>
+          <li><a href="https://doi.org/10.1542/peds.2025-075320" target="_blank" rel="noopener">AAP 2026 디지털 정책, 질·맥락·대화</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule dont" id="r4"><div class="num">X</div><div class="body">
+        <div class="tags"><span class="tag">식사</span><span class="tag">예비</span></div>
+        <h3>젖병을 물려 재우거나, 주스·단 음료를 들고 다니며 마시게 하지 않는다</h3>
+        <ul class="lines slip">
+          <li><span>실수</span><span>잠투정할 때 우유병을 물려 재운다. 밤에 깨면 다시 우유를 준다.</span></li>
+          <li><span>실수</span><span>"물은 안 먹으니까" 하고 빨대컵에 사과주스를 담아 들고 다니게 한다.</span></li>
+        </ul>
+        <p class="instead"><span>대신</span><span>음료는 물과 흰 우유가 기본이다. 모유 수유 중이면 모유도 괜찮다. 우유는 컵으로 하루 2컵(약 480ml) 안팎. 주스 대신 과일을 주고, 자기 전 마지막은 양치다.</span></p>
+        <p class="note">AAP는 젖병을 12~18개월에 끊으라고 한다. 100% 주스는 하루 120ml까지 허용한다.</p>
+        <div class="evidence"><span class="src">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/healthy-living/nutrition/Pages/Recommended-Drinks-for-Young-Children-Ages-0-5.aspx" target="_blank" rel="noopener">AAP 2023, 0~5세 권장 음료. 12~24개월 우유 하루 2컵</a></li>
+          <li><a href="https://www.healthychildren.org/English/ages-stages/baby/feeding-nutrition/Pages/Discontinuing-the-Bottle.aspx" target="_blank" rel="noopener">AAP, 젖병 끊기</a></li>
+          <li><a href="https://doi.org/10.1542/peds.2017-0967" target="_blank" rel="noopener">AAP 2017, 과일주스 권고</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule dont" id="r5"><div class="num">X</div><div class="body">
+        <div class="tags"><span class="tag">미디어</span><span class="tag">예비</span></div>
+        <h3>TV를 배경으로 켜 두거나, 아이 옆에서 폰만 보지 않는다</h3>
+        <ul class="lines slip">
+          <li><span>실수</span><span>아이가 블록 놀이하는 동안 거실 TV로 뉴스를 켜 둔다. "애는 안 보는데 뭐."</span></li>
+          <li><span>실수</span><span>놀이터에서 폰을 보며 대답만 한다. "응응, 잘했네."</span></li>
+        </ul>
+        <p class="instead"><span>대신</span><span>안 보는 TV는 끈다. 아이와 있을 땐 폰을 다른 방에 둔다.</span></p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://doi.org/10.1111/j.1467-8624.2009.01337.x" target="_blank" rel="noopener">Kirkorian 외 2009, 배경 TV가 켜지면 부모와 아이의 대화가 줄어듦(실험)</a></li>
+          <li><a href="https://doi.org/10.1001/jamapediatrics.2023.6790" target="_blank" rel="noopener">Brushe 외 2024, 12~36개월 화면 시간과 부모·아이 대화 감소</a></li>
+          <li><a href="http://news.donga.com/3/all/20160308/76870590/1" target="_blank" rel="noopener">오은영, 어른부터 스마트폰을 내려놓기</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule dont" id="r6"><div class="num">X</div><div class="body">
+        <div class="tags"><span class="tag">식사</span><span class="tag">예비</span></div>
+        <h3>억지로 먹이거나 음식으로 상·벌을 주지 않는다</h3>
+        <ul class="lines slip">
+          <li><span>실수</span><span>"한 입만 더 먹으면 놀이터 가자." "다 안 먹으면 과자 없어."</span></li>
+          <li><span>실수</span><span>고개를 돌리는데 숟가락을 밀어 넣는다.</span></li>
+        </ul>
+        <p class="instead"><span>대신</span><span>"안 먹어도 돼" 하고 접시를 둔다. 상은 음식 대신 말로 한다. "숟가락 혼자 들었네!"</span></p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src on">전문가</span><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/ages-stages/toddler/nutrition/Pages/Picky-Eaters.aspx" target="_blank" rel="noopener">AAP, 압박하거나 간식으로 보상하면 그 음식을 더 싫어할 수 있음</a></li>
+          <li><a href="https://doi.org/10.1016/j.physbeh.2017.02.015" target="_blank" rel="noopener">Jansen 외 2017, 압박과 편식의 양방향 관계</a></li>
+          <li>오은영, 배도 안 고픈데 자꾸 떠먹이면 먹기가 싫어진다(기사)</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule dont" id="e5"><div class="num">X</div><div class="body">
+        <div class="tags"><span class="tag">언어</span><span class="tag">예비</span></div>
+        <h3>말해야 준다는 조건을 걸거나, 따라 말하게 시키거나, 정답 묻기를 연달아 하지 않는다</h3>
+        <ul class="lines slip">
+          <li><span>실수</span><span>"'물' 해 봐. '물' 해야 줄 거야."</span></li>
+          <li><span>실수</span><span>답을 기다리지 않고 "이거 뭐야? 이건? 이건?" 시험 보듯 몰아 묻는다. "멍멍이 아니고 강아지. 따라 해 봐, 강-아-지."</span></li>
+        </ul>
+        <p class="instead"><span>대신</span><span>"물 줄까? 물~" 들려주고 준다. 틀린 말은 맞게 한 번 들려주고 넘어간다. "까까 더" 하면 "과자 더 줄까?"</span></p>
+        <p class="note">한 번 묻고 기다리는 건 괜찮다. 대답이 없으면 답을 들려주고 넘어간다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src">전문가</span><span class="strength">근거 약</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.cambspborochildrenshealth.nhs.uk/speech-language-and-communication/helping-your-baby-or-toddler-to-talk/" target="_blank" rel="noopener">영국 NHS 언어치료, 말하라고 억지로 시키지 않기</a></li>
+          <li><a href="https://www.leicspart.nhs.uk/wp-content/uploads/2019/02/Creating-Opportunities-for-Communication.pdf" target="_blank" rel="noopener">영국 NHS, 손 뻗기·쳐다보기도 의사 표현</a></li>
+          <li>K-DST도 이 나이의 따라 말하기는 "정확하지 않아도" 인정한다</li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule dont" id="e7"><div class="num">X</div><div class="body">
+        <div class="tags"><span class="tag">훈육</span><span class="tag">예비</span></div>
+        <h3>혼자 방에 두거나 오래 앉혀 두는 타임아웃은 하지 않는다</h3>
+        <ul class="lines slip">
+          <li><span>실수</span><span>"생각하는 의자"에 5분, 10분씩 앉혀 두고 울다 지칠 때까지 둔다.</span></li>
+          <li><span>실수</span><span>방에 넣고 문을 닫으며 "반성하고 나와."</span></li>
+        </ul>
+        <p class="instead"><span>대신</span><span>위험한 행동이면 그 자리에서 떼어 내 곁에 앉아 1분 안팎 진정시킨다. "때리면 놀이 멈춰. 아빠 옆에 앉자." 부모가 크게 "후~" 숨을 쉬어 보이고, 진정되면 바로 놀이로 돌아간다.</span></p>
+        <p class="note">2세 무렵부터는 AAP·CDC가 짧고 차분한 타임아웃을 허용한다(CDC 안내는 2~4세 대상). 이 항목은 길게, 혼자 두는 방식만 막는다. Zero to Three는 2~3세에게 타임아웃 자체가 잘 안 듣는다고 본다.</p>
+        <div class="evidence"><span class="src on">논문</span><span class="src on">기관</span><span class="src">전문가</span><span class="strength">근거 중, 의견 갈림</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/family-life/family-dynamics/communication-discipline/Pages/Disciplining-Your-Child.aspx" target="_blank" rel="noopener">AAP, 걸음마기엔 필요하면 짧게(1세당 1분)</a></li>
+          <li><a href="https://www.cdc.gov/parenting-toddlers/time-out/steps.html" target="_blank" rel="noopener">CDC 타임아웃 절차(2~4세 대상)</a></li>
+          <li><a href="https://zerotothree.org/resource/how-toddlers-learn-self-control-from-24-36-months" target="_blank" rel="noopener">Zero to Three, 2~3세에는 안아 주거나 곁에서 진정시키기</a></li>
+          <li>보건복지부 2015, 연령당 1분 안내(2차)</li>
+        </ul></details>
+      </div></li>
+
+    </ol>
+  </section>
+
+  <!-- Tantrum sequence -->
+  <section class="block" id="tantrum">
+    <div class="block-head">
+      <h2>떼쓰거나 때릴 때 순서</h2>
+      <p>해라 4, 5와 하지 마라 1~5를 한 장면으로 묶었다. 엄마 아빠가 같은 순서로 하기로 정해 두자.</p>
+    </div>
+    <ol class="steps">
+      <li><span class="dot">1</span><b>안전</b><span class="say">위험하면 말보다 몸으로 먼저 막는다. 드러누우면 안전한 곳으로 옮긴다.</span><a class="ref" href="#d5">O 몸으로 막기</a></li>
+      <li><span class="dot">2</span><b>짧게</b><span class="say">"때리면 아파." 낮은 목소리로 한마디.</span><a class="ref" href="#d5">O 몸으로 막기</a></li>
+      <li><span class="dot">3</span><b>이름 붙이기</b><span class="say">"속상하구나. 더 놀고 싶었구나."</span><a class="ref" href="#d4">O 떼 받아 주기</a></li>
+      <li><span class="dot">4</span><b>곁에서</b><span class="say">요구는 들어주지 않고 말을 줄인다. 안기려 하면 바로 안아 준다.</span><a class="ref" href="#d4">O 떼 받아 주기</a></li>
+      <li><span class="dot">5</span><b>다음으로</b><span class="say">진정되면 다음 활동으로. 잘 넘긴 순간을 알아준다.</span><a class="ref" href="#d6">O 바로 칭찬</a></li>
+    </ol>
+    <div class="never">
+      <p>이 순서 중에 하지 않을 것</p>
+      <div class="chips"><a class="chip x" href="#x1">때리기</a><a class="chip x" href="#x2">소리 지르기</a><a class="chip x" href="#x3">"두고 간다"</a><a class="chip x" href="#x4">결국 사 주기</a><a class="chip x" href="#x5">폰 쥐여 주기</a><a class="chip x" href="#x7">"뚝 그쳐"</a></div>
+    </div>
+  </section>
+
+  <!-- Doctor -->
+  <section class="block" id="doctor">
+    <div class="block-head">
+      <h2>이럴 땐 전문가 상담</h2>
+      <p>다음 검진까지 기다리지 말고 소아과에 물어볼 때. 상담을 받는다고 문제가 있다는 뜻은 아니다.</p>
+    </div>
+    <div class="grid2">
+      <div class="panel">
+        <h3>말·발달</h3>
+        <ul>
+          <li>18개월: 엄마·아빠 말고 단어 3개를 말하려 하지 않는다. 흥미로운 걸 손가락으로 가리켜 보여 주지 않는다.</li>
+          <li>24개월: 두 단어 조합이 없다. "곰 어딨어?"에 그림책 속 곰을 가리키지 못한다.</li>
+          <li>하던 말이나 사회적 기술을 잃었다. 나이와 상관없이 바로 상담.</li>
+          <li>말이 걱정되면 청력검사부터 한다. 영유아검진 4차(18~24개월) 발달평가도 꼭 받는다.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>떼·공격 행동</h3>
+        <ul>
+          <li>떼를 쓰며 머리를 박는 등 스스로를 다치게 한다.</li>
+          <li>거의 매번 사람을 때리거나 물건을 부순다.</li>
+          <li>공격 행동이 몇 주 넘게 계속되고 상처가 생긴다.</li>
+          <li>말도 늦고 떼도 심하다. 둘 다 평가받는다.</li>
+        </ul>
+        <p class="note">이 기준은 대부분 3~6세 연구에서 나왔다. 지금 나이에는 참고로만 본다.</p>
+      </div>
+      <div class="panel alert">
+        <h3>바로 응급실</h3>
+        <ul>
+          <li>버튼전지나 자석을 삼킨 것 같다. 119.</li>
+          <li>머리를 부딪힌 뒤 의식을 잃었거나, 두 번 넘게 토하거나, 심하게 처지거나, 경련한다.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>부모 쪽 신호</h3>
+        <ul>
+          <li>화가 나서 아이를 때리거나 소리치는 일이 반복된다.</li>
+          <li>훈육 문제로 부부가 계속 다툰다. 부모교육이나 가족상담을 받는다.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Verification -->
+  <section class="block" id="check">
+    <div class="block-head">
+      <h2>검증 방법</h2>
+      <p>논문도 기관도 전문가도 틀릴 수 있다고 보고 검증했다.</p>
+    </div>
+    <ol class="flow">
+      <li><b>3</b> 영역 리서치</li><li class="sep" aria-hidden="true">›</li>
+      <li>후보 <b>48</b>개</li><li class="sep" aria-hidden="true">›</li>
+      <li>검증 대상 <b>26</b>개</li><li class="sep" aria-hidden="true">›</li>
+      <li>독립 검증 <b>3</b>명</li><li class="sep" aria-hidden="true">›</li>
+      <li>상호 검증</li><li class="sep" aria-hidden="true">›</li>
+      <li>채택 <b>20</b>개</li>
+    </ol>
+    <div class="grid2">
+      <div class="panel">
+        <h3>세 검증자의 역할</h3>
+        <ul>
+          <li>반증 담당: 반대 연구와 최신 지침으로 원칙을 뒤집어 본다.</li>
+          <li>발달 적합성 담당: 18~24개월 이정표와 우리 집 장면에 맞는지 본다.</li>
+          <li>출처 대조 담당: 인용한 원문을 직접 열어 맞게 옮겼는지 본다.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>채택 기준</h3>
+        <ul>
+          <li>셋이 서로의 결과를 보지 않고 26개를 각각 판정했다.</li>
+          <li>판정이 갈린 항목은 다른 두 명의 근거를 읽고 다시 정했다.</li>
+          <li>3명 중 2명 이상 동의한 문구만 남겼다. 20개 항목 자체는 3명 모두 통과시켰다.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>근거의 한계</h3>
+        <ul>
+          <li>근거 중 상당수가 2~5세 연구다. 지금 나이에 그대로 들어맞는다고 보긴 어려워서 카드에 따로 적었다.</li>
+          <li>"같이 나타난다"만 보여 주는 연구가 많다. 원인과 결과까지 확인한 건 RCT라고 적힌 근거뿐이다.</li>
+          <li>AAP 2016 미디어 지침은 2026년에 새 정책으로 바뀌었다. 하정훈 칼럼의 수치는 2010년 글이라 쓰지 않았다.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>다음 확장 후보</h3>
+        <ul>
+          <li>리서치 후보 48개 가운데 남은 항목은 모두 본 목록, "더 지킬 것", 카드 메모 중 한 곳에 들어갔다.</li>
+          <li>확장 후보 8개도 같은 방식으로 3명이 독립 검증과 상호 검증을 했다. 6개는 "더 지킬 것"에, 2개는 해라 6·7 메모에 넣었다.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer class="end">
+    <p>근거 "강"은 여러 연구를 묶어 분석했거나, 무작위 대조 시험(RCT)이 있거나, 주요 기관 의견이 같다는 뜻이다. "중"은 한 기관의 권고나 아이를 오래 따라간 관찰 연구 수준이다.</p>
+    <p>이 문서는 진료를 대신하지 않는다. 우리 아이가 다르게 보이면 소아과에 물어본다.</p>
+  </footer>
+</div>
+</body>
+</html>

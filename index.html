@@ -150,6 +150,27 @@ details.cite ul { margin: 0.4rem 0 0; padding-left: 1.1rem; display: grid; gap: 
 
 footer.end { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--line); font-size: 0.82rem; color: var(--muted); display: grid; gap: 0.3rem; }
 footer.end p { margin: 0; }
+
+/* Tabs */
+.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 6; background: var(--bg); margin-inline: calc(-1 * clamp(16px, 4vw, 32px)); padding: 0.6rem clamp(16px, 4vw, 32px) 0; border-bottom: 1px solid var(--line); display: flex; gap: 0.25rem; overflow-x: auto; scrollbar-width: none; }
+.tabs button { font: inherit; font-size: 0.92rem; font-weight: 600; color: var(--muted); background: none; border: 0; border-bottom: 3px solid transparent; padding: 0.45rem 0.8rem 0.55rem; cursor: pointer; white-space: nowrap; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 4px; }
+.js .tabpanel[hidden] { display: none; }
+.jump { position: static; margin-inline: 0; padding: 1rem 0 0; border-bottom: 0; background: none; }
+/* Care cards */
+.care .num { color: var(--accent); }
+.care-head h2 { color: var(--accent); }
+.tag.pending { color: var(--dont); border-color: var(--dont); }
+.todo { margin: 0; padding-left: 1.15rem; display: grid; gap: 0.4rem; font-size: 0.95rem; }
+.todo a, .note a { color: var(--accent); }
+.when-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1rem 1.15rem; display: grid; gap: 0.6rem; }
+.when-card h3 { font-family: var(--font-body); font-size: 1rem; font-weight: 600; }
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.timeline li { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0.75rem; padding: 0.45rem 0; border-top: 1px solid var(--line); font-size: 0.93rem; }
+.timeline li:first-child { border-top: 0; }
+.timeline .age { font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+@media (max-width: 30rem) { .timeline li { grid-template-columns: 1fr; gap: 0.1rem; } }
 </style>
 </head>
 <body>
@@ -157,11 +178,12 @@ footer.end p { margin: 0; }
   <header class="masthead">
     <p class="label">18~24개월 · 아들 · 엄마 아빠 공통 기준</p>
     <h1>부모 행동 강령</h1>
-    <p class="lede">우리 집에서 지킬 해라 10가지와 하지 마라 10가지. 논문과 기관 지침, 국내 전문가 의견을 모으고 AI 검증자 셋이 서로 맞춰 봤다.</p>
+    <p class="lede">우리 집에서 지킬 해라와 하지 마라, 그리고 건강·돌봄·발달에서 챙길 것. 논문과 기관 지침, 국내 전문가 의견을 모으고 AI 검증자 셋이 서로 맞춰 봤다.</p>
     <ul class="meta">
-      <li>2026-10-08 작성</li>
-      <li>출처 236개 검토</li>
-      <li>32개 모두 검증자 3명 통과</li>
+      <li>2026-10-08 작성, 10-14 탭 추가</li>
+      <li>행동 강령 32개(출처 236개 검토)</li>
+      <li>챙길 것 36개(출처 93개)</li>
+      <li>모두 검증자 3명 통과</li>
     </ul>
     <div class="first">
       <h2>먼저 이것만</h2>
@@ -173,6 +195,13 @@ footer.end p { margin: 0; }
     </div>
   </header>
 
+  <div class="tabs" role="tablist" aria-label="탭">
+    <button role="tab" id="t-code" aria-controls="tab-code" aria-selected="true">행동 강령</button>
+    <button role="tab" id="t-health" aria-controls="tab-health" aria-selected="false">건강·의료</button>
+    <button role="tab" id="t-care" aria-controls="tab-care" aria-selected="false">일상 돌봄</button>
+    <button role="tab" id="t-grow" aria-controls="tab-grow" aria-selected="false">발달·놀이</button>
+  </div>
+<section class="tabpanel" id="tab-code" role="tabpanel" aria-labelledby="t-code">
   <nav class="jump" aria-label="바로 가기">
     <ul>
       <li><a href="#day">하루 지도</a></li>
@@ -875,13 +904,745 @@ footer.end p { margin: 0; }
           <li>확장 후보 8개도 같은 방식으로 3명이 독립 검증과 상호 검증을 했다. 6개는 목록 11번 이후에 "확장" 표시로, 2개는 해라 6·7 메모에 넣었다.</li>
         </ul>
       </div>
+      <div class="panel">
+        <h3>챙길 것 탭 검증</h3>
+        <ul>
+          <li>건강·의료, 일상 돌봄, 발달·놀이를 영역별로 두 번 조사했다. 행동 강령과 겹치는 내용은 뺐다.</li>
+          <li>같은 세 역할(반증, 발달 적합성, 출처 대조)이 36개 카드와 월령표를 서로 모른 채 판정했다. 탈락은 없었고, 고칠 문장을 모아 통합안을 만들었다.</li>
+          <li>통합안을 다시 셋이 판정했다. 반대 1건은 출처 원문에 맞춰 문장을 고쳐 정리했다. 출처 93개.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>챙길 것 탭 근거의 한계</h3>
+        <ul>
+          <li>약 용량은 국내 허가사항을 따랐다. 응급 기준은 국내 지침이 없는 것이 많아 영국 NHS와 미국 소아과학회 기준을 썼다.</li>
+          <li>영유아검진 기간을 넘겼을 때 처리, 작은 화상의 국내 기준, 창문 잠금 수치, 119 의료상담 운영은 원문을 확인하지 못했다.</li>
+          <li>어린이집 반 편성과 대기 규칙은 2026년 안내 기준이다. 해마다 아이사랑에서 다시 확인한다.</li>
+        </ul>
+      </div>
     </div>
   </section>
 
+</section>
+
+<section class="tabpanel" id="tab-health" role="tabpanel" aria-labelledby="t-health">
+  <section class="block" id="health">
+    <div class="block-head care-head">
+      <h2>건강·의료 11</h2>
+      <p>검진과 접종은 기간을 지키고, 아플 때와 다쳤을 때 할 일은 미리 익혀 둔다.</p>
+      <p class="note">카드마다 "근거 보기"에 출처가 있다. 검증 방법은 <a href="#check">행동 강령 탭 맨 아래</a>에 있다.</p>
+    </div>
+    <div class="when-card">
+      <h3>월령별로 챙길 일</h3>
+      <ol class="timeline">
+      <li><span class="age">15~18개월</span><span>DTaP 4차, 폴리오 3차를 안 맞았으면 18개월 전에</span></li>
+      <li><span class="age">18개월</span><span>자폐 선별 질문지(M-CHAT-R/F) 1차</span></li>
+      <li><span class="age">18~24개월</span><span>영유아검진 4차, A형간염 2차, 일본뇌염 시작(아직이면 23개월 전에)</span></li>
+      <li><span class="age">18~29개월</span><span>구강검진 1차</span></li>
+      <li><span class="age">24개월</span><span>자폐 선별 질문지 2차, 침대 전환 신호 확인</span></li>
+      <li><span class="age">24~35개월</span><span>일본뇌염 3차(불활성화) 또는 2차(생백신)</span></li>
+      <li><span class="age">해마다 가을</span><span>독감 접종, 다음 해 3월 어린이집 입소 대기 확인</span></li>
+      <li><span class="age">30~36개월</span><span>영유아검진 5차</span></li>
+      </ol>
+    </div>
+    <ol class="rules">
+
+      <li class="rule care" id="h1"><div class="num">1</div><div class="body">
+        <div class="tags"><span class="tag">검진</span></div>
+        <h3>영유아검진 4차(18~24개월)와 구강검진 1차(18~29개월)를 기간 안에 받는다</h3>
+        <ul class="todo">
+          <li>건강iN에서 검진일과 문진표를 확인한다. 발달 문항은 부모가 답하니 평소 하는 행동을 적어 간다.</li>
+          <li>구강검진은 치과 검진기관에서 따로 받는다.</li>
+          <li>결과지에 '심화평가 권고'가 있으면 검진일부터 1년 안에 정밀검사를 받는다. 보건소에 검사비 지원을 신청한다.</li>
+        </ul>
+        <p class="note">검진은 차수마다 정해진 기간에 받는다. 놓칠 것 같으면 건강보험공단(1577-1000)에 바로 묻는다. 다음 차수는 30~36개월이다.</p>
+        <div class="evidence"><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.nhis.or.kr/nhis/healthin/wbhaca04800m01.do" target="_blank" rel="noopener">국민건강보험공단 건강iN, 영유아 건강검진 안내</a></li>
+          <li><a href="https://childhosp.seoul.go.kr/medical-info/health-medical-examination" target="_blank" rel="noopener">서울시 어린이병원, 영유아 건강검진</a></li>
+          <li><a href="https://www.hanam.go.kr/health/contents.do?key=965" target="_blank" rel="noopener">하남시 보건소, 영유아 발달정밀검사비 지원</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="h2"><div class="num">2</div><div class="body">
+        <div class="tags"><span class="tag">접종</span></div>
+        <h3>이 월령 예방접종을 빠짐없이 맞히고, 독감은 해마다 맞힌다</h3>
+        <ul class="todo">
+          <li>DTaP 4차는 15~18개월이다. A형간염 2차는 1차를 맞고 6개월이 지난 뒤 맞힌다.</li>
+          <li>일본뇌염은 백신 종류를 확인한다. 불활성화 백신은 1개월 간격으로 두 번, 그 11개월 뒤 세 번째다. 생백신은 한 번 맞고 12개월 뒤 두 번째다. 두 종류를 섞지 않는다.</li>
+          <li>12~15개월 접종(Hib, 폐렴구균, MMR, 수두)과 폴리오 3차(18개월까지)가 빠졌으면 지금 따라잡는다.</li>
+          <li>독감은 처음 맞는 해에 4주 간격으로 두 번 맞는다. 2026~2027절기 무료 접종은 2027년 4월 30일까지다.</li>
+          <li>접종한 날은 병원에서 20~30분 머물고, 집에 와서 3시간은 지켜본다. 고열이나 경련이 있으면 바로 진료를 받는다.</li>
+        </ul>
+        <p class="note">가벼운 감기나 미열만으로 접종을 미루지 않아도 된다. 예방접종도우미 앱으로 맞은 내역을 본다. 조부모가 데려갈 땐 차수와 백신 이름을 적어 준다.</p>
+        <div class="evidence"><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://nip.kdca.go.kr/irhp/infm/goVcntInfo.do?menuLv=1&amp;menuCd=1103" target="_blank" rel="noopener">질병관리청 예방접종도우미, 디프테리아(DTaP)</a></li>
+          <li><a href="https://nip.kdca.go.kr/irhp/infm/goVcntInfo.do?menuLv=1&amp;menuCd=1104" target="_blank" rel="noopener">질병관리청 예방접종도우미, 폴리오</a></li>
+          <li><a href="https://nip.kdca.go.kr/irhp/infm/goVcntInfo.do?menuLv=1&amp;menuCd=1109" target="_blank" rel="noopener">질병관리청 예방접종도우미, A형간염</a></li>
+          <li><a href="https://nip.kdca.go.kr/irhp/infm/goVcntInfo.do?menuLv=1&amp;menuCd=1110" target="_blank" rel="noopener">질병관리청 예방접종도우미, 일본뇌염</a></li>
+          <li><a href="https://nip.kdca.go.kr/irhp/infm/goVcntInfo.do?menuLv=1&amp;menuCd=114" target="_blank" rel="noopener">질병관리청 예방접종도우미, 접종 주의사항</a></li>
+          <li><a href="https://mediahub.seoul.go.kr/archives/2019389" target="_blank" rel="noopener">서울시 미디어허브, 2026~2027절기 독감 무료접종</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="h3"><div class="num">3</div><div class="body">
+        <div class="tags"><span class="tag">열</span></div>
+        <h3>열이 나면 숫자보다 아이 상태를 보고, 해열제는 설명서 표대로 준다</h3>
+        <ul class="todo">
+          <li>38℃부터 열로 본다. 옷을 다 벗기거나 찬물로 닦아 열을 내리지 않는다.</li>
+          <li>바로 119나 응급실: 목이 뻣뻣하다, 유리컵으로 눌러도 안 없어지는 발진, 깨워도 잘 안 깬다, 숨쉬기 힘들어한다.</li>
+          <li>그날 진료: 거의 안 먹는다, 기저귀가 덜 젖고 울어도 눈물이 안 난다, 40℃ 넘는 열이 반복된다, 만 2세 전인데 열이 24시간 넘게 간다.</li>
+          <li>해열제는 열 숫자를 낮추려고 주지 않는다. 아이가 힘들어할 때 준다. 해열제로 열성경련을 막을 수는 없다.</li>
+          <li>양은 설명서 표대로 정한다. 체중표가 있으면 체중으로 본다. 헷갈리면 약사에게 묻는다. 약에 든 계량기로 mL를 잰다. 숟가락으로 재지 않는다.</li>
+          <li>아이 체중을 폰과 냉장고에 적어 두고 조부모와 공유한다.</li>
+        </ul>
+        <p class="note">국내 허가 용량. 아세트아미노펜(어린이 현탁액 32mg/mL)은 1회 10~15mg/kg, 4~6시간 간격, 하루 5번까지다. 8~11.9kg은 3.5mL, 12~15.9kg은 5mL. 이부프로펜 시럽(100mg/5mL)은 1~2세 1회 2.5~5mL, 하루 3~4번, 하루 20mL까지다. 두 약 모두 설명서에 만 2세 전에는 먹이기 전에 의사나 약사와 상의하고, 지시 없이 열에 3일 이상 먹이지 말라고 적혀 있다. 두 약을 동시에 주지 않고, 번갈아 줄지는 소아과에 묻는다.</p>
+        <div class="evidence"><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://nedrug.mfds.go.kr/pbp/CCBBB01/getItemDetail?itemSeq=202200525" target="_blank" rel="noopener">식약처 의약품안전나라, 어린이타이레놀현탁액 허가사항</a></li>
+          <li><a href="https://nedrug.mfds.go.kr/pbp/CCBBB01/getItemDetail?itemSeq=198601920" target="_blank" rel="noopener">식약처 의약품안전나라, 어린이부루펜시럽 허가사항</a></li>
+          <li><a href="https://www.healthychildren.org/English/health-issues/conditions/fever/Pages/When-to-Call-the-Pediatrician.aspx" target="_blank" rel="noopener">AAP, When to Call the Pediatrician: Fever</a></li>
+          <li><a href="https://www.nhs.uk/conditions/fever-in-children/" target="_blank" rel="noopener">NHS, Fever in children</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="h4"><div class="num">4</div><div class="body">
+        <div class="tags"><span class="tag">응급</span></div>
+        <h3>열성경련, 질식, 화상, 머리 부딪힘 대처는 부부가 미리 익혀 둔다</h3>
+        <ul class="todo">
+          <li>열성경련: 시간을 잰다. 머리 밑에 부드러운 걸 대고 주변 물건을 치운다. 입에 아무것도 넣지 않는다. 멈추면 옆으로 눕힌다. 5분 넘으면 119. 처음 겪었거나, 24시간 안에 또 하거나, 몸 한쪽만 떨었거나, 멈추고 1시간 넘게 평소보다 처지면 멈췄어도 응급실에 간다. 직접 운전하지 말고 119를 부른다.</li>
+          <li>질식(1세 이상): 기침도 말도 못 하면 옆 사람에게 바로 119를 부르게 한다. 혼자면 스피커폰으로 119를 켠다. 등을 5번 세게 두드리고, 안 나오면 뒤에서 안고 배꼽과 명치 사이를 위로 5번 밀어 올린다. 나올 때까지 반복한다. 의식을 잃으면 바로 심폐소생술을 한다.</li>
+          <li>화상: 흐르는 찬물에 20분 식힌다. 연고, 기름, 된장을 바르지 않고 물집을 터뜨리지 않는다. 넓거나 깊은 화상, 얼굴·생식기·엉덩이 화상, 전기나 화학 화상은 응급실로 간다. 그 밖의 작은 화상은 집에서 돌봐도 되는지 119에 전화해 묻는다.</li>
+          <li>머리: 1m 넘게 또는 계단 5칸 넘게 떨어졌거나, 경련, 의식 잃음, 깨워도 처짐, 귀나 코에서 맑은 물이 나오거나, 평소와 다르게 보채거나 멍하면 응급실. 토하면 그날 진료를 받는다. 그 밖에도 하루는 곁에서 지켜본다.</li>
+        </ul>
+        <p class="note">돌 전 아기도 등 두드리기로 시작하지만 두 번째는 배가 아니라 가슴을 누른다. 영상을 보며 부부가 한 번 연습해 둔다.</p>
+        <div class="evidence"><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.kdca.go.kr/bbs/kdca/42/304937/download.do" target="_blank" rel="noopener">질병관리청, 2025 한국 심폐소생술 가이드라인 발표(2026-01-29)</a></li>
+          <li><a href="https://www.nhs.uk/conditions/febrile-seizures/" target="_blank" rel="noopener">NHS, Febrile seizures</a></li>
+          <li><a href="https://www.nhs.uk/conditions/burns-and-scalds/" target="_blank" rel="noopener">NHS, Burns and scalds</a></li>
+          <li><a href="https://www.nhs.uk/conditions/head-injury-and-concussion/" target="_blank" rel="noopener">NHS, Head injury and concussion</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="h5"><div class="num">5</div><div class="body">
+        <div class="tags"><span class="tag">약</span></div>
+        <h3>약국에서 사는 종합감기약은 만 2세 전엔 먹이지 않고, 해열제와 성분이 겹치지 않게 한다</h3>
+        <ul class="todo">
+          <li>어린이 종합감기약(예: 콜대원키즈콜드시럽) 설명서에는 "만 2세 미만에게 투여하지 않는다"고 적혀 있다. 필요하면 진료를 받는다.</li>
+          <li>소아과에서 처방받은 약은 처방대로 먹인다. 처방약과 집에 있는 해열제를 같이 줘도 되는지 약사에게 묻는다.</li>
+          <li>종합감기약에 아세트아미노펜이 든 제품이 있다. 해열제와 같이 먹이면 같은 성분을 두 번 먹게 된다. 성분표를 본다.</li>
+          <li>물약은 계량기로 잰다. 혀와 볼 안쪽 사이로 천천히 짜 넣는다.</li>
+          <li>약을 음식에 섞어도 되는지는 약사에게 먼저 묻는다.</li>
+        </ul>
+        <div class="evidence"><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://nedrug.mfds.go.kr/pbp/CCBBB01/getItemDetail?itemSeq=202007706" target="_blank" rel="noopener">식약처 의약품안전나라, 콜대원키즈콜드시럽 허가사항</a></li>
+          <li><a href="https://nedrug.mfds.go.kr/pbp/CCBBB01/getItemDetail?itemSeq=202200525" target="_blank" rel="noopener">식약처 의약품안전나라, 어린이타이레놀현탁액 허가사항</a></li>
+          <li><a href="https://www.healthychildren.org/English/safety-prevention/at-home/medication-safety/Pages/Using-Liquid-Medicines.aspx" target="_blank" rel="noopener">AAP, Using Liquid Medicines</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="h6"><div class="num">6</div><div class="body">
+        <div class="tags"><span class="tag">장염</span></div>
+        <h3>토하고 설사하면 경구수분보충액을 조금씩 자주 먹이고, 탈수 신호를 본다</h3>
+        <ul class="todo">
+          <li>경구수분보충액을 몇 분마다 한두 모금씩 준다. 한 번에 많이 주면 다시 토한다. 약국에서 "경구수분보충액"을 달라고 하면 된다.</li>
+          <li>주스와 스포츠음료는 주지 않는다. 당이 많아 설사가 심해질 수 있다.</li>
+          <li>진료 신호: 소변이 줄었다, 입과 혀가 마른다, 울어도 눈물이 적다, 너무 처지거나 보챈다, 피 섞인 설사, 물도 못 넘긴다.</li>
+          <li>바로 응급실: 초록색 토, 피나 커피색이 섞인 토, 갑자기 배를 몹시 아파하며 자지러지게 울기를 되풀이한다.</li>
+          <li>설사가 7일 넘거나 구토가 2일 넘으면 진료를 받는다.</li>
+        </ul>
+        <p class="note">탈수가 있을 땐 이부프로펜을 조심하라고 설명서에 적혀 있다. 상비약에 경구수분보충액을 넣어 둔다.</p>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/health-issues/conditions/abdominal/Pages/Drinks-to-Prevent-Dehydration-in-a-Vomiting-Child.aspx" target="_blank" rel="noopener">AAP, Drinks to Prevent Dehydration in a Vomiting Child</a></li>
+          <li><a href="https://www.nhs.uk/conditions/diarrhoea-and-vomiting/" target="_blank" rel="noopener">NHS, Diarrhoea and vomiting</a></li>
+          <li><a href="https://nedrug.mfds.go.kr/pbp/CCBBB01/getItemDetail?itemSeq=198601920" target="_blank" rel="noopener">식약처 의약품안전나라, 어린이부루펜시럽 허가사항</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="h7"><div class="num">7</div><div class="body">
+        <div class="tags"><span class="tag">어린이집</span></div>
+        <h3>어린이집에서 옮는 병은 다 나을 때까지 쉰다</h3>
+        <ul class="todo">
+          <li>열이 있는 동안은 보내지 않는다.</li>
+          <li>독감은 해열제 없이 열이 내리고 24시간 뒤에 보낸다. 해열제를 먹였으면 마지막으로 먹인 때부터 48시간을 본다.</li>
+          <li>수족구는 열이 없고 물집이 마른 뒤에 보낸다. 노로바이러스 장염은 증상이 사라지고 48시간 뒤에 보낸다. 수두는 물집이 모두 딱지가 앉아야 보낸다.</li>
+          <li>수족구는 나은 뒤에도 최소 8주는 대변으로 옮을 수 있다고 본다. 기저귀를 갈고 나면 비누로 30초 손을 씻는다.</li>
+          <li>아픈 날 누가 쉴지, 누구에게 맡길지 부부가 미리 정한다.</li>
+        </ul>
+        <p class="note">어린이집마다 소견서 요구가 다르다. 입소할 때 물어본다.</p>
+        <div class="evidence"><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.kdca.go.kr/bbs/kdca/55/228309/artclView.do" target="_blank" rel="noopener">질병관리청, 2025 시설별 인플루엔자 관리지침</a></li>
+          <li><a href="https://www.kdca.go.kr/bbs/kdca/55/305086/download.do" target="_blank" rel="noopener">질병관리청, 수족구병 관리지침</a></li>
+          <li><a href="https://www.kdca.go.kr/bbs/kdca/42/304658/download.do" target="_blank" rel="noopener">질병관리청, 노로바이러스 보도참고자료(2026-01-16)</a></li>
+          <li><a href="https://news.seoul.go.kr/welfare/archives/581531" target="_blank" rel="noopener">서울시 복지 누리집, 수두</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="h8"><div class="num">8</div><div class="body">
+        <div class="tags"><span class="tag">밤·휴일</span></div>
+        <h3>밤과 휴일에 갈 병원, 집에 둘 약을 미리 정해 둔다</h3>
+        <ul class="todo">
+          <li>가벼운 증상이면 달빛어린이병원에 간다. 응급의료포털(e-Gen) 앱으로 문 연 곳을 찾고 출발 전에 전화한다.</li>
+          <li>집 근처 달빛어린이병원 한 곳과 소아 진료가 되는 응급실 한 곳을 폰에 저장한다.</li>
+          <li>약, 세제, 버튼전지, 자석을 삼켰으면 아파 보이지 않아도 119를 부르거나 바로 응급실에 간다. 삼킨 물건이나 약 통을 들고 간다. 억지로 토하게 하지 않는다.</li>
+          <li>갈지 말지 애매하면 119에 전화해 상담을 받는다.</li>
+          <li>상비약: 해열제 두 종류와 계량기, 체온계, 경구수분보충액, 생리식염수, 밴드와 거즈. 잠금 상자에 둔다.</li>
+        </ul>
+        <div class="evidence"><span class="strength">근거 약~중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.e-gen.or.kr/" target="_blank" rel="noopener">응급의료포털 e-Gen</a></li>
+          <li><a href="https://www.healthychildren.org/English/safety-prevention/at-home/medication-safety/Pages/Using-Liquid-Medicines.aspx" target="_blank" rel="noopener">AAP, Using Liquid Medicines</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="h9"><div class="num">9</div><div class="body">
+        <div class="tags"><span class="tag">치아</span></div>
+        <h3>불소치약은 쌀알만큼 하루 두 번, 마무리 양치는 부모가 한다</h3>
+        <ul class="todo">
+          <li>아침 먹고 한 번, 자기 전에 한 번 닦는다. 아직 못 뱉어도 쌀알 크기면 쓴다. 양은 부모가 짜 준다. 뱉을 줄 알면 뱉게만 하고 물로 여러 번 헹구지 않는다.</li>
+          <li>아이가 먼저 닦고 부모가 다시 닦아 준다.</li>
+          <li>치과에서 3~6개월마다 불소를 바른다. 바른 뒤 30분~1시간은 먹지 않는다. 치과 안내를 따른다.</li>
+          <li>첫 치과를 아직 안 갔으면 구강검진을 기다리지 말고 지금 간다.</li>
+        </ul>
+        <p class="note">영유아 불소도포는 건강보험이 안 된다. 보건소 무료 사업이 있는지 지역마다 확인한다. 젖병 끊기와 주스 줄이기는 <a href="#r4">하지 마라 11</a>에 있다.</p>
+        <div class="evidence"><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=6572" target="_blank" rel="noopener">질병관리청 국가건강정보포털, 불소도포</a></li>
+          <li><a href="https://www.healthychildren.org/English/healthy-living/oral-health/Pages/Brushing-Up-on-Oral-Health-Never-Too-Early-to-Start.aspx" target="_blank" rel="noopener">AAP, Brushing Up on Oral Health</a></li>
+          <li><a href="https://www.accesson.kr/jkda/assets/pdf/44528/journal-59-12-704.pdf" target="_blank" rel="noopener">김초록·송지현, 대한치과의사협회지 2021, 영아 구강 관리</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="h10"><div class="num">10</div><div class="body">
+        <div class="tags"><span class="tag">입 다침</span></div>
+        <h3>넘어져 이가 흔들리거나 빠지면 다시 끼우지 말고 치과에 간다</h3>
+        <ul class="todo">
+          <li>빠진 젖니는 다시 끼우지 않는다. 밑에 있는 영구치 싹이 다칠 수 있다.</li>
+          <li>피가 나면 깨끗한 거즈로 눌러 멈춘다. 흔들리거나 밀려 들어간 이도 치과에서 본다.</li>
+          <li>상처가 깊어 벌어졌거나, 눌러도 피가 멈추지 않거나, 머리도 부딪혔으면 응급실로 간다.</li>
+        </ul>
+        <p class="note">걷기 시작하면 넘어져 입을 다치는 일이 잦다. 국내 대학병원 한 곳에서 돌 전 아기가 치과에 온 이유 중 61%가 외상이었다.</p>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.aapd.org/research/oral-health-policies--recommendations/guidelines-for-the-management-of-traumatic-dental-injuries-in-the-primary-dentition/" target="_blank" rel="noopener">AAPD, 유치 외상 관리 지침(IADT)</a></li>
+          <li><a href="https://www.accesson.kr/jkda/assets/pdf/44528/journal-59-12-704.pdf" target="_blank" rel="noopener">김초록·송지현, 대한치과의사협회지 2021, 영아 구강 관리</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="h11"><div class="num">11</div><div class="body">
+        <div class="tags"><span class="tag">귀·눈·숨</span></div>
+        <h3>잘 못 듣거나, 잘 못 보거나, 자면서 숨이 막히는 신호를 알아 둔다</h3>
+        <ul class="todo">
+          <li>귀: 불러도 자주 반응이 없다. 어떤 소리는 듣고 어떤 소리는 못 듣는 것 같다. 고집으로 오해하기 쉽다.</li>
+          <li>눈: 눈이 안쪽이나 바깥쪽으로 돈다. 눈동자 가운데가 하얗게 보인다. 눈이 떨린다. 눈꺼풀이 처진다.</li>
+          <li>잠: 거의 매일 코를 골고, 숨을 힘들게 쉬거나 멈추는 것 같다. 낮에 유난히 졸려 한다.</li>
+          <li>이런 신호가 있으면 검진을 기다리지 말고 진료를 받는다.</li>
+        </ul>
+        <p class="note">말이 늦을 때 청력검사부터 하는 이유다(<a href="#x8">하지 마라 8</a>). 중이염 뒤 귀에 물이 차 있으면 3개월쯤 지켜보며 청력을 확인한다.</p>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/health-issues/conditions/ear-nose-throat/Pages/Hearing-Loss.aspx" target="_blank" rel="noopener">AAP, Hearing Loss in Children</a></li>
+          <li><a href="https://www.healthychildren.org/English/health-issues/conditions/eyes/Pages/Warning-Signs-of-Vison-Problems-in-Children.aspx" target="_blank" rel="noopener">AAP, Warning Signs of Vision Problems</a></li>
+          <li><a href="https://www.healthychildren.org/English/ages-stages/baby/sleep/Pages/Sleep-Apnea-Detection.aspx" target="_blank" rel="noopener">AAP, Sleep Apnea Detection</a></li>
+          <li><a href="https://synapse.koreamed.org/articles/1042973" target="_blank" rel="noopener">대한의사협회지 2015, 소아 중이염 진료지침</a></li>
+        </ul></details>
+      </div></li>
+
+    </ol>
+  </section>
+</section>
+
+<section class="tabpanel" id="tab-care" role="tabpanel" aria-labelledby="t-care">
+  <section class="block" id="care">
+    <div class="block-head care-head">
+      <h2>일상 돌봄 13</h2>
+      <p>먹는 것, 자는 것, 집과 바깥의 안전. 매일 챙기는 것과 시기가 오면 바꾸는 것을 모았다.</p>
+      <p class="note">카드마다 "근거 보기"에 출처가 있다. 검증 방법은 <a href="#check">행동 강령 탭 맨 아래</a>에 있다.</p>
+    </div>
+    <ol class="rules">
+
+      <li class="rule care" id="c1"><div class="num">1</div><div class="body">
+        <div class="tags"><span class="tag">영양</span></div>
+        <h3>고기, 생선, 달걀 중 하나는 매일 상에 올린다</h3>
+        <ul class="todo">
+          <li>1~2세 하루 기준: 에너지 900kcal, 단백질 20g, 철 6mg, 칼슘 450mg(2025 한국인 영양소 섭취기준).</li>
+          <li>우유를 많이 마시거나 고기를 계속 안 먹으면 철이 모자라기 쉽다. 소아과에 피검사를 묻는다.</li>
+          <li>어린이집에 다니면 점심은 거기서 먹는다. 아침과 저녁에 단백질 반찬을 챙긴다.</li>
+        </ul>
+        <p class="note">우유는 하루 2컵(480ml) 안팎이 기준이다(<a href="#r4">하지 마라 11</a>). 미국 소아·영양 학회 합의문은 12~24개월 우유를 2~3컵까지로 잡는다. 국내 42만 명 자료에서는 30~36개월에 하루 500ml 이상 마신 아이의 빈혈 위험이 조금 높았다. 비타민D 하루 기준은 한국 200IU, 미국 소아과학회 600IU로 다르다. 바깥 활동이 적거나 우유를 안 마시면 영양제를 줄지 소아과와 정한다.</p>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://health.seoulmc.or.kr/uploadFiles/2025_%ED%95%9C%EA%B5%AD%EC%9D%B8%EC%98%81%EC%96%91%EC%86%8C%EC%84%AD%EC%B7%A8%EA%B8%B0%EC%A4%80_%ED%99%9C%EC%9A%A9.pdf" target="_blank" rel="noopener">보건복지부·한국영양학회, 2025 한국인 영양소 섭취기준</a></li>
+          <li><a href="https://www.aapd.org/globalassets/media/policies_guidelines/r_healthybev.pdf" target="_blank" rel="noopener">Healthy Eating Research 합의문 요약(AAPD)</a></li>
+          <li><a href="https://www.healthychildren.org/English/news/Pages/iron-deficiency-anemia-prevention-screening-treatment-AAP-updates-guidance.aspx" target="_blank" rel="noopener">AAP, 철 결핍 지침 갱신(2026)</a></li>
+          <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8541527/" target="_blank" rel="noopener">Nutrients 2021, 국내 영유아 우유 섭취와 빈혈·비만</a></li>
+          <li><a href="https://www.healthychildren.org/English/healthy-living/nutrition/Pages/Where-We-Stand-Vitamins.aspx" target="_blank" rel="noopener">AAP, Where We Stand: Vitamins</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="c2"><div class="num">2</div><div class="body">
+        <div class="tags"><span class="tag">물</span></div>
+        <h3>물은 컵으로 자주 주고, 우유를 뺀 나머지는 물로 채운다</h3>
+        <ul class="todo">
+          <li>1~2세가 하루 마실 양은 물과 우유를 합쳐 700ml쯤이다. 국과 음식에 든 물은 따로다.</li>
+          <li>우유가 2컵(약 480ml)이면 나머지는 물로 준다.</li>
+          <li>컵이나 빨대컵에 물을 담아 아이 손 닿는 곳에 둔다. 더운 날과 많이 뛴 날은 더 준다.</li>
+        </ul>
+        <p class="note">우유 양과 주스 제한은 <a href="#r4">하지 마라 11</a>에 있다.</p>
+        <div class="evidence"><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://health.seoulmc.or.kr/uploadFiles/2025_%ED%95%9C%EA%B5%AD%EC%9D%B8%EC%98%81%EC%96%91%EC%86%8C%EC%84%AD%EC%B7%A8%EA%B8%B0%EC%A4%80_%ED%99%9C%EC%9A%A9.pdf" target="_blank" rel="noopener">보건복지부·한국영양학회, 2025 한국인 영양소 섭취기준</a></li>
+          <li><a href="https://www.aapd.org/globalassets/media/policies_guidelines/r_healthybev.pdf" target="_blank" rel="noopener">Healthy Eating Research 합의문 요약(AAPD)</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="c3"><div class="num">3</div><div class="body">
+        <div class="tags"><span class="tag">영양</span></div>
+        <h3>간과 단맛은 최소로 하고, 조부모에게도 글로 알려 둔다</h3>
+        <ul class="todo">
+          <li>국과 찌개는 국물보다 건더기를 준다. 1~2세 나트륨 충분섭취량은 하루 630mg이다.</li>
+          <li>과자나 음료 성분표에 있는 꿀, 시럽, 농축 과일주스도 첨가당이다. 2026년 미국 식생활지침은 만 4세까지 첨가당을 피하라고 한다. 100% 과일주스는 하루 120ml까지다(<a href="#r4">하지 마라 11</a>).</li>
+          <li>조부모께 "국은 간 없이, 과자·사탕·요구르트 음료는 안 됨"처럼 적어 드린다.</li>
+          <li>아직 안 먹여 본 알레르기 음식(달걀, 땅콩 등)은 집에서, 오전에, 한 번에 하나씩 시작한다. 땅콩은 통째로 주지 않고 땅콩버터를 묽게 펴서 준다. 심한 아토피가 있거나 음식에 반응한 적이 있으면 먼저 소아과에 묻는다.</li>
+        </ul>
+        <p class="note">먹는 양이 날마다 들쑥날쑥한 건 정상이다. 하루가 아니라 일주일을 보고 판단한다.</p>
+        <div class="evidence"><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://health.seoulmc.or.kr/uploadFiles/2025_%ED%95%9C%EA%B5%AD%EC%9D%B8%EC%98%81%EC%96%91%EC%86%8C%EC%84%AD%EC%B7%A8%EA%B8%B0%EC%A4%80_%ED%99%9C%EC%9A%A9.pdf" target="_blank" rel="noopener">보건복지부·한국영양학회, 2025 한국인 영양소 섭취기준</a></li>
+          <li><a href="https://cdn.realfood.gov/DGA_508.pdf" target="_blank" rel="noopener">미국 식생활지침 2025–2030</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="c4"><div class="num">4</div><div class="body">
+        <div class="tags"><span class="tag">안전</span></div>
+        <h3>화상과 추락 사고를 막는 물건을 먼저 갖춘다</h3>
+        <ul class="todo">
+          <li>1~3세 아이가 고온 화상 사고의 58%를 차지한다(한국소비자원, 2024년 발표). 원인은 주로 전기밥솥과 가열식 가습기다. 높은 곳에 두고 전선은 짧게 정리한다. 아이를 안은 채 뜨거운 음식을 다루지 않는다.</li>
+          <li>목욕물은 팔꿈치나 온도계로 확인한다. 가스레인지는 안쪽 화구를 쓰고 냄비 손잡이를 안쪽으로 돌린다.</li>
+          <li>0~12세 어린이 사고 1위는 추락이고, 추락 장소는 침대가 가장 많다. 침대와 소파 아래에 매트를 깐다.</li>
+          <li>창문과 베란다 문은 아이 머리가 빠지지 않을 만큼만 열리게 잠금장치를 단다. 방충망은 아이 몸무게를 못 버틴다. 창가에 소파, 침대, 의자, 장난감 상자를 두지 않는다.</li>
+          <li>서랍 잠금, 모서리 보호대, 욕실 미끄럼 방지 매트, 주방 안전문을 갖춘다.</li>
+          <li>조부모 집도 같은 기준으로 한 번 둘러본다. 약통이 식탁에 나와 있는 경우가 많다.</li>
+        </ul>
+        <p class="note">가구 고정과 잠금은 <a href="#d10">해라 10</a>에 있다.</p>
+        <div class="evidence"><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.korea.kr/news/policyNewsView.do?newsId=148929742" target="_blank" rel="noopener">정책브리핑, 어린이 안전사고 안전주의보(한국소비자원, 2024-05-30)</a></li>
+          <li><a href="https://www.yugacrew.com/crewletter/child-safety-accident-home-falls-2026" target="_blank" rel="noopener">유가크루, 2026 가정 내 추락 사고(2025 어린이 안전사고 동향 인용)</a></li>
+          <li><a href="https://www.chop.edu/centers-programs/injury-prevention-program/burn-prevention" target="_blank" rel="noopener">CHOP, Burn prevention</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="c5"><div class="num">5</div><div class="body">
+        <div class="tags"><span class="tag">삼킴</span></div>
+        <h3>자석, 동전, 구슬, 약은 아이 손이 닿지 않는 높이에 둔다</h3>
+        <ul class="todo">
+          <li>이물질을 삼켜 다친 아이는 1세가 가장 많다. 자석, 장난감, 동전, 구슬, 스티커, 전지 순이다.</li>
+          <li>자석과 버튼전지는 식도와 장에 구멍을 낼 수 있다. 삼켰으면 아파 보이지 않아도 119를 부르거나 바로 응급실에 간다. 냉장고 자석, 리모컨, 체중계, 차 키를 확인한다.</li>
+          <li>전지 칸이 잠기지 않는 물건은 테이프로 막는다.</li>
+          <li>약은 먹이고 바로 잠금 상자에 넣는다. 가방이나 협탁에 두지 않는다.</li>
+        </ul>
+        <p class="note">삼켰을 때 대처는 <a href="#h8">건강·의료 8</a>.</p>
+        <div class="evidence"><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://news.seoul.go.kr/economy/archives/572526" target="_blank" rel="noopener">서울시, 어린이 이물질 삼킴 주의(공정위·한국소비자원)</a></li>
+          <li><a href="https://www.heraldk.com/article/2026051020512860494" target="_blank" rel="noopener">헤럴드경제, 이물질 삼킴 사고(2026-05)</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="c6"><div class="num">6</div><div class="body">
+        <div class="tags"><span class="tag">끈·리콜</span></div>
+        <h3>블라인드 줄과 옷 끈은 아이 목에 닿지 않게 하고, 아이 물건은 리콜을 확인한다</h3>
+        <ul class="todo">
+          <li>블라인드는 줄 없는 제품이 좋다. 줄이 있으면 바닥에서 160cm 넘게 올려 고정한다.</li>
+          <li>아이 옷의 긴 끈과 목걸이, 젖꼭지 줄은 빼고 입힌다. 잘 때는 특히 뺀다.</li>
+          <li>쓰는 카시트, 유모차, 장난감이 리콜 대상인지 제품안전정보센터(safetykorea.kr)에서 찾아본다.</li>
+        </ul>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.sidae.com/article/2016062317258045330" target="_blank" rel="noopener">시대일보, 블라인드 줄 안전주의보(국가기술표준원·소비자원)</a></li>
+          <li><a href="https://www.safetykorea.kr" target="_blank" rel="noopener">제품안전정보센터</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="c7"><div class="num">7</div><div class="body">
+        <div class="tags"><span class="tag">잠</span></div>
+        <h3>아기침대에서 내려올 때와 낮잠이 한 번으로 줄 때를 놓치지 않는다</h3>
+        <ul class="todo">
+          <li>키가 89cm쯤 되거나, 난간이 아이 키의 3/4보다 낮거나, 난간에 다리를 걸치면 유아침대나 바닥 잠자리로 옮긴다. 바닥 매트나 범퍼침대에서 재운다면 옮길 필요가 없다.</li>
+          <li>옮긴 뒤엔 아이 방 전체가 안전해야 한다. 밤에 혼자 깨서 돌아다닐 수 있다.</li>
+          <li>18개월이면 대부분 오후 낮잠 한 번으로 줄어든다. 오전 낮잠을 자꾸 거부하면 한 번으로 바꾼다. 그동안은 저녁잠을 조금 당긴다.</li>
+          <li>방은 어둡고 서늘하고 조용하게 한다. 좋아하는 인형이나 이불을 같이 둔다.</li>
+          <li>어린이집 낮잠 시각을 알아 두고 주말에도 맞춘다.</li>
+        </ul>
+        <p class="note">잠자리 순서는 <a href="#d9">해라 9</a>에 있다. 코골이와 숨 멈춤은 <a href="#h11">건강·의료 11</a>.</p>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.nationwidechildrens.org/sleep-in-toddlers" target="_blank" rel="noopener">Nationwide Children's, Sleep in toddlers</a></li>
+          <li><a href="https://www.cedars-sinai.org/health-topics/moving-your-toddler-from-crib-to-bed" target="_blank" rel="noopener">Cedars-Sinai, Moving your toddler from crib to bed</a></li>
+          <li><a href="https://www.boystownhospital.org/knowledge-center/transitioning-two-naps-to-one" target="_blank" rel="noopener">Boys Town, Transitioning two naps to one</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="c8"><div class="num">8</div><div class="body">
+        <div class="tags"><span class="tag">배변</span></div>
+        <h3>배변 훈련은 준비 신호가 보일 때 시작하고, 서두르지 않는다</h3>
+        <ul class="todo">
+          <li>신호: 2시간 넘게 기저귀가 마른다. 변보기 전에 힘주거나 숨는다. "이리 와" 같은 말을 따른다. 바지 내리기를 거든다. 젖은 기저귀를 싫어한다.</li>
+          <li>신호가 몇 개 보이면 아이 변기나 변기 시트, 발판, 갈아입을 옷을 준비한다.</li>
+          <li>이사, 동생 출산 전후, 큰 병을 앓을 때는 미룬다.</li>
+          <li>어린이집과 시작 시점, 쓰는 말("쉬", "응가")을 맞춘다.</li>
+          <li>변이 일주일에 3번보다 적고 단단하거나, 볼 때 아파하면 진료를 받는다. 오래 끌수록 낫기 어렵다.</li>
+        </ul>
+        <p class="note">시작은 보통 2~3세, 대부분 만 4세까지 가린다. 일찍 시작해도 빨리 끝나지 않고 기간만 길어진다는 연구가 있다.</p>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/ages-stages/toddler/toilet-training/Pages/The-Right-Age-to-Toilet-Train.aspx" target="_blank" rel="noopener">AAP, The Right Age to Toilet Train</a></li>
+          <li><a href="https://pubmed.ncbi.nlm.nih.gov/12671117/" target="_blank" rel="noopener">Blum 외 2003, Pediatrics(배변 훈련 시작 시기)</a></li>
+          <li><a href="https://www.nhs.uk/baby/health/constipation-in-children/" target="_blank" rel="noopener">NHS, Constipation in children</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="c9"><div class="num">9</div><div class="body">
+        <div class="tags"><span class="tag">바깥</span></div>
+        <h3>밖에서는 햇빛, 물, 바퀴, 차를 챙긴다</h3>
+        <ul class="todo">
+          <li>햇빛: 모자와 그늘이 먼저다. 선크림은 SPF 30 이상을 2시간마다, 물놀이 뒤 다시 바른다.</li>
+          <li>물: 수영할 줄 아는 어른이 팔 닿는 거리에서 눈을 떼지 않는다. 강, 바다에선 구명조끼를 입힌다. 수영 교실은 안전장치 하나를 더하는 것이지 어른의 감시를 대신하지 못한다.</li>
+          <li>바퀴: 킥보드나 세발자전거는 처음 탈 때부터 안전모를 씌운다. 내리막은 피한다.</li>
+          <li>차: 잠깐이라도 차 안에 혼자 두지 않는다. 내릴 때 뒷좌석을 확인한다. 아파트 단지와 주차장에서는 손을 잡고 걷는다. 후진하는 차는 키 작은 아이를 못 본다.</li>
+        </ul>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/safety-prevention/at-play/Pages/Water-Safety-and-Young-Children.aspx" target="_blank" rel="noopener">AAP, Water safety and young children</a></li>
+          <li><a href="https://health.clevelandclinic.org/sunscreen-for-babies" target="_blank" rel="noopener">Cleveland Clinic, Sunscreen for babies</a></li>
+          <li><a href="https://www.ajunews.com/view/20200521135301396" target="_blank" rel="noopener">아주경제, 어린이 킥보드 사고 5년간 4.6배(한국소비자원)</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="c10"><div class="num">10</div><div class="body">
+        <div class="tags"><span class="tag">날씨</span></div>
+        <h3>미세먼지, 폭염, 한파가 심한 날은 노는 방법을 바꾼다</h3>
+        <ul class="todo">
+          <li>에어코리아 앱이나 날씨 앱에서 미세먼지가 '나쁨' 이상이면 바깥놀이를 줄이고 큰길을 피한다. 몸 놀이는 집이나 실내 놀이터에서 한다.</li>
+          <li>24개월 전엔 마스크를 씌우지 않는다. 답답해도 스스로 벗지 못한다. 공기 좋은 실내에 있는 게 낫다.</li>
+          <li>미세먼지가 있어도 짧게 환기한다. 요리할 땐 후드를 켠다. 실내 습도는 40~60%로 맞춘다.</li>
+          <li>폭염엔 물을 자주 준다. 한파엔 어른보다 한 겹 더 입히고 모자, 장갑을 챙긴다.</li>
+        </ul>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.korea.kr/news/healthView.do?newsId=148885420" target="_blank" rel="noopener">정책브리핑, 미세먼지 임산부·영유아 건강수칙</a></li>
+          <li><a href="https://wspehsu.ucsf.edu/wp-content/uploads/2025/02/mask-or-respirator-use-during-pregnancy-and-early-child-years-in-wildfire-smoke-events_2_5_25.pdf" target="_blank" rel="noopener">미국 서부 PEHSU, 연기·미세먼지 때 영유아 마스크(2025)</a></li>
+          <li><a href="https://news.seoul.go.kr/env/indoor-index" target="_blank" rel="noopener">서울시, 실내 공기질 기준</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="c11"><div class="num">11</div><div class="body">
+        <div class="tags"><span class="tag">개</span></div>
+        <h3>개와 아이를 잠깐이라도 단둘이 두지 않는다</h3>
+        <ul class="todo">
+          <li>우리 집 개, 순한 개도 예외가 없다.</li>
+          <li>자는 개, 먹는 개, 새끼를 돌보는 개는 건드리지 않게 한다. 개와 줄다리기나 씨름 놀이를 하지 않게 한다.</li>
+          <li>어린아이가 물리면 머리, 얼굴, 목을 다치기 쉽다. 물리면 씻고 진료를 받는다.</li>
+        </ul>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/safety-prevention/all-around/Pages/Dog-Bite-Prevention-Tips.aspx" target="_blank" rel="noopener">AAP, Dog Bite Prevention Tips</a></li>
+          <li><a href="https://www.dailyvet.co.kr/news/etc/148059" target="_blank" rel="noopener">데일리벳, 개물림 119 이송 통계(소방청)</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="c12"><div class="num">12</div><div class="body">
+        <div class="tags"><span class="tag">피부·위생</span></div>
+        <h3>보습, 기저귀 발진, 손 씻기를 매일 챙긴다</h3>
+        <ul class="todo">
+          <li>피부가 건조하거나 아토피가 있으면 미지근한 물로 짧게 씻긴다. 물기를 가볍게 닦은 뒤 바로 보습제를 바른다.</li>
+          <li>기저귀는 젖으면 바로 간다. 발진엔 산화아연 크림을 바른다. 며칠 지나도 안 낫거나 물집, 고름, 열이 있으면 진료를 받는다.</li>
+          <li>집에 오면, 밥 먹기 전, 기저귀 갈고 나서 비누로 30초 손을 씻는다.</li>
+        </ul>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://kidshealth.org/en/parents/diaper-rash-sheet.html" target="_blank" rel="noopener">KidsHealth, Diaper rash</a></li>
+          <li><a href="https://www.mayoclinic.org/diseases-conditions/diaper-rash/diagnosis-treatment/drc-20371641" target="_blank" rel="noopener">Mayo Clinic, Diaper rash</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="c13"><div class="num">13</div><div class="body">
+        <div class="tags"><span class="tag">신발</span></div>
+        <h3>집에서는 맨발로 두고, 신발은 바닥이 잘 휘는 걸 골라 몇 달마다 다시 잰다</h3>
+        <ul class="todo">
+          <li>집 안에서는 맨발이 좋다. 신발은 밖에서 발을 보호하려고 신는다.</li>
+          <li>고를 때: 앞쪽이 잘 휘고 바닥이 평평하다, 발가락 공간이 넉넉하다, 뒤꿈치가 단단하다, 찍찍이나 끈으로 고정된다.</li>
+          <li>발이 빨리 자라니 몇 달마다 다시 잰다. 비싼 신발이 더 좋은 건 아니다.</li>
+        </ul>
+        <p class="note">이 나이 평발은 정상이다. 아치는 6세 무렵 생긴다.</p>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.betterhealth.vic.gov.au/health/healthyliving/childrens-feet-and-shoes" target="_blank" rel="noopener">Better Health Channel(호주 빅토리아주 보건부), Children's feet and shoes</a></li>
+        </ul></details>
+      </div></li>
+
+    </ol>
+  </section>
+</section>
+
+<section class="tabpanel" id="tab-grow" role="tabpanel" aria-labelledby="t-grow">
+  <section class="block" id="grow">
+    <div class="block-head care-head">
+      <h2>발달·놀이 12</h2>
+      <p>발달을 확인하는 법, 놀이와 책, 또래와 어린이집. 말 기준과 화면 기준은 행동 강령 탭에 있다.</p>
+      <p class="note">카드마다 "근거 보기"에 출처가 있다. 검증 방법은 <a href="#check">행동 강령 탭 맨 아래</a>에 있다.</p>
+    </div>
+    <ol class="rules">
+
+      <li class="rule care" id="g1"><div class="num">1</div><div class="body">
+        <div class="tags"><span class="tag">이정표</span></div>
+        <h3>18개월과 24개월에 말 말고 다른 발달도 같이 본다</h3>
+        <ul class="todo">
+          <li>18개월: 떨어져 가다가도 부모를 돌아본다. 옷 입을 때 팔을 넣는다. 혼자 걷는다. 끄적인다. 컵으로 마신다. 소파에 혼자 오르내린다.</li>
+          <li>24개월: 누가 울면 멈추고 쳐다본다. 통을 잡고 뚜껑을 연다. 공을 찬다. 뛴다. 계단 몇 칸을 걸어 오른다. 숟가락으로 먹는다.</li>
+          <li>못 하는 게 있거나 하던 걸 잃으면 다음 검진을 기다리지 말고 소아과에 묻는다.</li>
+          <li>늘 까치발로 걷거나, 한 손만 쓰고 다른 손을 거의 안 쓰면 진료 때 말한다.</li>
+        </ul>
+        <p class="note">말 기준은 <a href="#x8">하지 마라 8</a>에 있다. CDC 이정표는 그 나이 아이 대부분이 하는 행동이다. 오른손잡이·왼손잡이는 2~4세에 드러난다.</p>
+        <div class="evidence"><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.cdc.gov/act-early/milestones/18-months.html" target="_blank" rel="noopener">CDC, Milestones by 18 Months</a></li>
+          <li><a href="https://www.cdc.gov/act-early/milestones/2-years.html" target="_blank" rel="noopener">CDC, Milestones by 2 Years</a></li>
+          <li><a href="https://www.bsm.or.kr/03_health/file/bsm_developmentalscreeningtestforinfantsandchildren_18~19months.pdf" target="_blank" rel="noopener">K-DST 18~19개월 문진표(보건복지부·질병관리본부)</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="g2"><div class="num">2</div><div class="body">
+        <div class="tags"><span class="tag">선별</span></div>
+        <h3>자폐 선별 질문지는 18개월과 24개월에 집에서 해 보고, 결과를 소아과에 보여 준다</h3>
+        <ul class="todo">
+          <li>미국 소아과학회는 일반 발달 검사와 별도로 18개월, 24개월 두 번 자폐 선별 질문지(M-CHAT-R/F)를 권한다.</li>
+          <li>질문지는 mchatscreen.com에 한국어판이 있다. 3~7점이면 소아과에서 후속 면담을 받는다. 8점 이상이면 소아과에서 진료의뢰서를 받아 바로 발달 전문 진료를 예약한다.</li>
+          <li>눈여겨볼 행동: 가리켜 보여 주기, 이름 부르면 쳐다보기, 부모가 보는 곳 따라보기, 흉내 내기.</li>
+          <li>발달클리닉은 대기가 몇 달인 곳이 많다. 의심되면 예약부터 걸어 둔다.</li>
+        </ul>
+        <p class="note">18개월에 괜찮아도 24개월에 한 번 더 한다. 영유아검진 18개월 문진표에도 눈맞춤, 이름 반응, 가리키기를 묻는 추가 질문이 있지만 자폐만 보는 검사는 아니다. 한국어 이전판 연구에서는 후속 면담까지 해야 결과를 믿을 수 있었다. 미국 예방서비스위원회(2016)는 걱정이 없는 아이까지 모두 선별할 때의 이득과 해를 따질 근거가 아직 부족하다고 본다. 하지 말라는 뜻은 아니다.</p>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://mchatscreen.com/mchat-rf/scoring/" target="_blank" rel="noopener">M-CHAT 공식 사이트, 채점</a></li>
+          <li><a href="https://mchatscreen.com/mchat-rf/translations/" target="_blank" rel="noopener">M-CHAT 공식 사이트, 번역본</a></li>
+          <li><a href="https://www.bsm.or.kr/03_health/file/bsm_developmentalscreeningtestforinfantsandchildren_18~19months.pdf" target="_blank" rel="noopener">K-DST 18~19개월 문진표(보건복지부·질병관리본부)</a></li>
+          <li><a href="https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/autism-spectrum-disorder-in-young-children-screening" target="_blank" rel="noopener">USPSTF, Autism Spectrum Disorder in Young Children: Screening</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="g3"><div class="num">3</div><div class="body">
+        <div class="tags"><span class="tag">분리불안</span></div>
+        <h3>엄마 아빠와 떨어질 때 우는 건 이 나이에 정상이다</h3>
+        <ul class="todo">
+          <li>떨어질 때 우는 건 부모에게 애착이 생겼다는 뜻이다. 분리불안은 10~18개월에 가장 심하고 대개 24개월 무렵까지 이어진다. 3세쯤엔 훨씬 수월해진다.</li>
+          <li>맡기기 전에 맡을 사람과 미리 친해지게 한다. 배부르고 잘 잔 때 맡긴다.</li>
+          <li>떠날 땐 차분하게 짧게 인사하고 나간다. 몰래 사라지지 않는다. 떨어지는 시간을 조금씩 늘린다.</li>
+          <li>불안 때문에 또래와 전혀 어울리지 못하거나 일상이 크게 막히면 상담한다.</li>
+        </ul>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.msdmanuals.com/ko/home/아동의-건강-문제/영아-및-소아의-증상/분리-불안-및-낯가림" target="_blank" rel="noopener">MSD 매뉴얼, 분리 불안 및 낯가림</a></li>
+          <li><a href="https://www.healthychildren.org/English/ages-stages/toddler/Pages/emotional-development-2-year-olds.aspx" target="_blank" rel="noopener">AAP, Emotional Development: 2 Year Olds</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="g4"><div class="num">4</div><div class="body">
+        <div class="tags"><span class="tag">기질</span></div>
+        <h3>아이 기질을 알면 같은 행동에 덜 부딪친다</h3>
+        <ul class="todo">
+          <li>기질은 상당 부분 타고난다. 활동량, 규칙성, 낯선 것에 다가가는 정도, 적응 속도, 반응 강도 같은 것이다.</li>
+          <li>순한 아이, 까다로운 아이, 천천히 적응하는 아이가 있다. 어느 한쪽에 딱 들어맞지 않는 아이도 많다.</li>
+          <li>천천히 적응하는 아이는 새 장소와 사람을 탐색할 시간을 넉넉히 주고 변화를 미리 알린다.</li>
+          <li>규칙은 같게 지키고, 기질에 맞춰 속도와 방법을 바꾼다.</li>
+        </ul>
+        <p class="note">기질은 경험과 관계 속에서 조금씩 바뀐다. 다음 활동 예고는 <a href="#r3">해라 13</a>에 있다.</p>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/ages-stages/gradeschool/Pages/How-to-Understand-Your-Childs-Temperament.aspx" target="_blank" rel="noopener">AAP, Understanding Your Child's Temperament</a></li>
+          <li><a href="https://www.lancaster.ac.uk/fas/psych/glossary/temperament/new_york_longitudinal_study_-nyls-/" target="_blank" rel="noopener">Lancaster University, 뉴욕 종단연구 해설</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="g5"><div class="num">5</div><div class="body">
+        <div class="tags"><span class="tag">흉내 놀이</span></div>
+        <h3>인형 밥 주기, 전화 놀이 같은 흉내 놀이를 같이 한다</h3>
+        <ul class="todo">
+          <li>이 나이는 부모가 하는 일을 따라 한다. 인형을 안고 밥을 먹이고 재우는 놀이를 판을 깔아 준다.</li>
+          <li>집 물건으로 바꿔 논다. 머리빗은 마이크, 휴지심은 망원경, 그릇은 북이다.</li>
+          <li>아이가 놀이를 이끌게 두고, 부모는 따라가며 한마디씩 붙인다.</li>
+        </ul>
+        <p class="note">흉내 놀이를 잘하는 아이가 말도 잘 느는 경향이 있다. 영유아검진 18개월 문항에도 "인형에게 맘마 주는 시늉"이 있다.</p>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/family-life/power-of-play/Pages/pretend-play-ways-children-can-exercise-their-imagination.aspx" target="_blank" rel="noopener">AAP, Pretend Play</a></li>
+          <li><a href="https://www.healthychildren.org/English/ages-stages/toddler/fitness/Pages/Playing-is-How-Toddlers-Learn.aspx" target="_blank" rel="noopener">AAP, Playing is How Toddlers Learn</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="g6"><div class="num">6</div><div class="body">
+        <div class="tags"><span class="tag">장난감</span></div>
+        <h3>장난감은 안전한 것만 적게 꺼내 두고 돌려 쓴다</h3>
+        <ul class="todo">
+          <li>KC 표시와 사용 연령을 본다. "3세 미만 사용 금지"는 형, 누나 장난감이라도 치운다.</li>
+          <li>휴지심에 쏙 들어가는 크기는 치운다. 버튼전지가 든 장난감은 배터리 칸이 나사로 잠기는지 본다.</li>
+          <li>한 번에 4~6개만 꺼내 두고 나머지는 상자에 넣었다가 바꿔 준다.</li>
+          <li>블록, 끼우기, 소꿉, 공, 밀고 끄는 장난감, 굵은 크레용처럼 단순한 것이 좋다. 화면 달린 장난감은 사람과 노는 걸 대신하지 못한다.</li>
+        </ul>
+        <p class="note">장난감이 적을 때 한 가지로 더 오래, 다양하게 놀았다는 실험이 있다(36명 소규모).</p>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/ages-stages/baby/Pages/What-to-Look-for-in-a-Toy.aspx" target="_blank" rel="noopener">AAP, Toy Buying Tips</a></li>
+          <li><a href="https://news.utoledo.edu/index.php/12_18_2017/fewer-toys-lead-to-richer-play-experiences-ut-researchers-find" target="_blank" rel="noopener">톨레도대, 장난감 수 실험(Dauch 외 2018)</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="g7"><div class="num">7</div><div class="body">
+        <div class="tags"><span class="tag">책</span></div>
+        <h3>그림책은 두꺼운 보드북으로 고르고, 문장 끝을 아이가 채우게 읽는다</h3>
+        <ul class="todo">
+          <li>한 쪽에 사물 하나, 문장은 짧게, 반복 문구와 흉내 말이 있는 책을 고른다. 밥, 잠, 목욕처럼 아이 하루가 나오는 책이 좋다.</li>
+          <li>반복 문구 끝을 비워 두고 5~10초 기다린다. "곰 세 마리가 한 집에…" 아이가 소리 내면 받아 주고 한 단어 붙인다. 소리를 안 내면 부모가 채우고 넘어간다.</li>
+          <li>"이거 우리 집에도 있지?" 하고 책과 우리 집을 이어 준다.</li>
+          <li>아이가 책을 가져오면 받아서 읽어 준다. 같은 책을 또 읽자고 하면 또 읽는다.</li>
+          <li>사는 지역이 북스타트에 참여하면 도서관에서 북스타트 플러스(19~35개월) 책꾸러미를 무료로 받는다. bookstart.org '책꾸러미 받는 곳'에서 찾는다.</li>
+        </ul>
+        <p class="note">"이거 뭐야?"를 줄줄이 묻지 않는다(<a href="#e5">하지 마라 14</a>).</p>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.bookstart.org/" target="_blank" rel="noopener">북스타트코리아</a></li>
+          <li><a href="https://www.readingrockets.org/topics/early-literacy-development/articles/dialogic-reading-effective-way-read-aloud-young-children" target="_blank" rel="noopener">Reading Rockets, Dialogic Reading</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="g8"><div class="num">8</div><div class="body">
+        <div class="tags"><span class="tag">또래</span></div>
+        <h3>또래 옆에서 따로 노는 건 정상이다. 아직 나누기를 기대하지 않는다</h3>
+        <ul class="todo">
+          <li>이 나이엔 친구 옆에서 각자 논다. 좋아하는 물건을 안 나누려는 것도 정상이다.</li>
+          <li>놀이 모임은 2~3명부터. 다치지 않게 보되 아이들끼리 해결할 틈을 둔다.</li>
+          <li>같은 장난감을 두 개 준비하면 뺏기 다툼이 준다.</li>
+        </ul>
+        <p class="note">뺏거나 밀 때는 <a href="#d5">해라 5</a>대로 몸으로 먼저 막는다.</p>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/ages-stages/toddler/Pages/social-development-2-year-olds.aspx" target="_blank" rel="noopener">AAP, Social Development: 2 Year Olds</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="g9"><div class="num">9</div><div class="body">
+        <div class="tags"><span class="tag">몸 놀이</span></div>
+        <h3>아빠든 엄마든 몸으로 노는 시간을 따로 정해 둔다</h3>
+        <ul class="todo">
+          <li>쫓기, 간지럼, 이불 썰매, 쿠션 산 넘기처럼 몸을 쓰는 놀이를 한다.</li>
+          <li>아이가 싫다고 하거나 너무 흥분하면 바로 멈추고 쉬게 한다.</li>
+          <li>주말이나 저녁에 시간을 정해 두면 꾸준히 하기 쉽다.</li>
+        </ul>
+        <p class="note">아빠와 몸으로 많이 논 아이가 감정과 행동 조절을 더 잘했다는 관찰 연구가 있다. 원인과 결과까지 확인한 연구는 아니다. 하루 3시간 몸 놀이는 <a href="#e2">해라 14</a>에 있다.</p>
+        <div class="evidence"><span class="strength">근거 약~중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.cambridgenetwork.co.uk/news/playtime-dad-may-improve-childrens-self-control" target="_blank" rel="noopener">Cambridge Network, 아빠 놀이 문헌고찰(Developmental Review 2020)</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="g10"><div class="num">10</div><div class="body">
+        <div class="tags"><span class="tag">바깥</span></div>
+        <h3>날마다 바깥에 나가 놀고, 문화센터는 꼭 다니지 않아도 된다</h3>
+        <ul class="todo">
+          <li>놀이터와 공원에서 흙, 물, 나뭇잎을 만지고 언덕을 오른다. 바깥에서 더 많이 움직인다.</li>
+          <li>집에서도 물, 모래, 음식을 만지며 어지르는 놀이를 허락한다. 치우기 쉬운 곳을 정해 둔다.</li>
+          <li>영유아 사교육은 나중 언어나 학습에 효과가 없거나 작았다는 국내 연구가 있다.</li>
+          <li>문화센터를 다닌다면 부모가 같이 하는 짧은 수업, 몸 놀이나 음악 위주로 고른다.</li>
+          <li>육아종합지원센터 장난감도서관과 놀이실을 무료나 적은 연회비로 쓴다. 운영 방식은 지역 센터 누리집에서 본다.</li>
+        </ul>
+        <p class="note">16개월 아이가 식탁에서 음식을 주무르며 놀 때 그 음식 이름을 더 잘 배웠다는 실험이 있다.</p>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://dhnews.co.kr/news/view/1065572589176402" target="_blank" rel="noopener">육아정책연구소 연구 보도, 영유아 사교육과 발달</a></li>
+          <li><a href="https://eepro.naaee.org/research/eeresearch/impacts-unstructured-nature-play-health-early-childhood-development-systematic" target="_blank" rel="noopener">자연 놀이 체계적 문헌고찰</a></li>
+          <li><a href="https://now.uiowa.edu/2013/12/messy-children-make-better-learners" target="_blank" rel="noopener">아이오와대, 어지르는 놀이와 단어 학습(Perry 외 2013)</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="g11"><div class="num">11</div><div class="body">
+        <div class="tags"><span class="tag">어린이집</span></div>
+        <h3>어린이집은 직접 보고 고르고, 적응은 몇 주에 걸쳐 늘린다</h3>
+        <ul class="todo">
+          <li>반은 태어난 해로 나뉜다. 2027년 3월 기준 2024년생은 2세반(교사 1명당 7명), 2025년생은 1세반(5명)이다.</li>
+          <li>대기는 선착순이 아니라 우선순위 순이다. 맞벌이면 재직증명서를 미리 떼어 둔다. 입소 안내가 오면 기한 안에 답한다. 한 곳에 들어가면 7일 뒤 다른 대기가 지워지니, 옮길 생각이면 7일 안에 대기 연장을 신청한다.</li>
+          <li>어린이집 평가 등급(A~D)은 없어졌고 영역별로 글로 된 결과가 나온다. 아이사랑에서 읽어 본다.</li>
+          <li>방문해서 물어볼 것: 우리 반 실제 아이 수와 담임 수, CCTV인지 네트워크 카메라인지, 영상 열람 방법, 바깥놀이 시간, 적응 방식, 담임이 자주 바뀌는지.</li>
+          <li>입소 전에 아이와 같이 가 본다. 집 물건 하나(가족사진, 작은 인형)를 들려 보낸다.</li>
+          <li>처음엔 부모와 함께 짧게 있다가 몇 주에 걸쳐 시간을 늘린다. 헤어질 땐 몰래 사라지지 않는다(<a href="#g3">발달·놀이 3</a>). 복직한다면 적응을 2~4주 먼저 시작한다.</li>
+        </ul>
+        <p class="note">1·2월생은 보호자가 신청하면 윗반에 갈 수 있다. CCTV 영상은 60일 이상 보관하고, 아이 안전을 확인하려는 보호자는 열람을 요청할 수 있다. 미국 대규모 연구에서는 어린이집에 다닌 시간보다 집에서 부모가 대하는 방식이 발달을 더 크게 갈랐다. 다닌 시간이 아주 길면 문제행동이 조금 늘었다는 결과도 같이 나왔다.</p>
+        <div class="evidence"><span class="strength">근거 중</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://news.seoul.go.kr/welfare/archives/100972" target="_blank" rel="noopener">서울시 복지 누리집, 어린이집 평가제</a></li>
+          <li><a href="https://casenote.kr/법령/영유아보육법/제15조의5" target="_blank" rel="noopener">영유아보육법 제15조의4·5(CCTV) 전재</a></li>
+          <li><a href="https://www.law.go.kr/법령/영유아보육법시행규칙" target="_blank" rel="noopener">국가법령정보센터, 영유아보육법 시행규칙</a></li>
+          <li><a href="https://www.healthychildren.org/English/family-life/work-and-child-care/Pages/preparing-your-child-for-child-care.aspx" target="_blank" rel="noopener">AAP, Preparing Your Child for Child Care</a></li>
+          <li><a href="https://www.sciencedaily.com/releases/2007/03/070326095340.htm" target="_blank" rel="noopener">ScienceDaily, NICHD 보육 연구(2007)</a></li>
+          <li><a href="https://www.childcare.go.kr/" target="_blank" rel="noopener">아이사랑</a></li>
+        </ul></details>
+      </div></li>
+
+      <li class="rule care" id="g12"><div class="num">12</div><div class="body">
+        <div class="tags"><span class="tag">두 언어</span></div>
+        <h3>두 언어를 쓰는 집이면 부모는 각자 편한 말로 하고, 단어는 두 언어를 합쳐 센다</h3>
+        <ul class="todo">
+          <li>두 언어를 들어도 말이 늦어지지 않는다. 발달 기준은 같다.</li>
+          <li>말 늦음을 볼 때 단어는 두 언어를 합쳐 센다. 문제가 있으면 두 언어 모두에서 보인다.</li>
+          <li>두 말을 섞어 쓰는 건 정상이다. 대개 3세쯤 구분한다.</li>
+        </ul>
+        <p class="note">다문화가족은 가족센터에서 이중언어 교육과 부모 코칭을 무료로 받을 수 있다(1577-9337).</p>
+        <div class="evidence"><span class="strength">근거 강</span></div>
+        <details class="cite"><summary>근거 보기</summary><ul>
+          <li><a href="https://www.healthychildren.org/English/ages-stages/gradeschool/school/Pages/7-Myths-Facts-Bilingual-Children-Learning-Language.aspx" target="_blank" rel="noopener">AAP·ASHA, Young Children Learning Multiple Languages</a></li>
+          <li><a href="https://www.mogef.go.kr/sp/fam/sp_fam_f003.do" target="_blank" rel="noopener">가족센터 운영 안내</a></li>
+        </ul></details>
+      </div></li>
+
+    </ol>
+  </section>
+</section>
+
   <footer class="end">
+    <p>약 용량과 응급 기준은 약 설명서와 의료진 판단이 먼저다.</p>
     <p>근거 "강"은 여러 연구를 묶어 분석했거나, 무작위 대조 시험(RCT)이 있거나, 주요 기관 의견이 같다는 뜻이다. "중"은 한 기관의 권고나 아이를 오래 따라간 관찰 연구 수준이다.</p>
     <p>이 문서는 진료를 대신하지 않는다. 우리 아이가 다르게 보이면 소아과에 물어본다.</p>
   </footer>
 </div>
+<script>
+(function () {
+  var root = document.documentElement; root.classList.add('js');
+  var tabs = [].slice.call(document.querySelectorAll('.tabs [role="tab"]'));
+  var panels = [].slice.call(document.querySelectorAll('.tabpanel'));
+  function show(id, focus) {
+    tabs.forEach(function (t) { var on = t.getAttribute('aria-controls') === id; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; if (on && focus) t.focus(); });
+    panels.forEach(function (p) { p.hidden = p.id !== id; });
+  }
+  function fromHash() {
+    var h = decodeURIComponent(location.hash.slice(1)); var el = h && document.getElementById(h);
+    var p = el && (el.classList.contains('tabpanel') ? el : el.closest('.tabpanel'));
+    show(p ? p.id : panels[0].id);
+    if (el && !el.classList.contains('tabpanel')) el.scrollIntoView();
+  }
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { show(t.getAttribute('aria-controls')); history.replaceState(null, '', '#' + t.getAttribute('aria-controls')); window.scrollTo(0, document.querySelector('.tabs').offsetTop); });
+    t.addEventListener('keydown', function (e) {
+      var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return;
+      var n = tabs[(i + d + tabs.length) % tabs.length]; show(n.getAttribute('aria-controls'), true);
+    });
+  });
+  window.addEventListener('hashchange', fromHash); fromHash();
+})();
+</script>
 </body>
 </html>

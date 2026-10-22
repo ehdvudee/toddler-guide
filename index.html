@@ -175,6 +175,50 @@ footer.end p { margin: 0; }
 .timeline li:first-child { border-top: 0; }
 .timeline .age { font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
 @media (max-width: 30rem) { .timeline li { grid-template-columns: 1fr; gap: 0.1rem; } }
+/* Sub tabs (육아휴직 판단) */
+.subtabs { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.subtabs button { font: inherit; font-size: 0.88rem; font-weight: 600; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 0.3rem 0.95rem; cursor: pointer; }
+.subtabs button[aria-selected="true"] { color: var(--bg); background: var(--accent); border-color: var(--accent); }
+.subtabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.js .subpanel[hidden] { display: none; }
+.subpanel { min-width: 0; }
+.lv-stack { display: grid; gap: 1.4rem; }
+.lv-block { display: grid; gap: 0.6rem; min-width: 0; }
+.lv-block h3 { font-family: var(--font-body); font-size: 1rem; font-weight: 600; }
+.lv-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; color: var(--muted); }
+.lv-verdict { border-left: 4px solid var(--accent); }
+.lv-q { font-weight: 600; font-size: 1.05rem; margin: 0; }
+.lv-pending { font-size: 0.76rem; font-weight: 600; padding: 0.05rem 0.5rem; border-radius: 999px; background: var(--dont-soft); color: var(--dont); white-space: nowrap; }
+.lv-forks { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: 0.6rem; }
+.lv-fork { border: 1px solid var(--line); border-radius: 8px; padding: 0.7rem 0.85rem; display: grid; gap: 0.2rem; min-width: 0; font-size: 0.93rem; }
+.lv-fork span { color: var(--muted); }
+.lv-bul { margin: 0; padding-left: 1.15rem; display: grid; gap: 0.3rem; font-size: 0.95rem; }
+.lv-note { color: var(--muted); font-size: 0.92rem; margin: 0; }
+.lv-table { overflow-x: auto; }
+.lv-table table { border-collapse: collapse; width: 100%; font-size: 0.93rem; }
+.lv-table th, .lv-table td { border-bottom: 1px solid var(--line); padding: 0.5rem 0.6rem; text-align: left; vertical-align: top; }
+.lv-table th { color: var(--muted); font-weight: 600; font-size: 0.83rem; }
+.lv-reasons { display: grid; gap: 0.8rem; }
+.lv-reason { display: grid; grid-template-columns: 6.8rem minmax(0, 1fr); gap: 0.8rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--line); }
+.lv-reason:last-child { border-bottom: 0; }
+.lv-chip { justify-self: start; align-self: start; display: inline-block; font-size: 0.76rem; font-weight: 600; padding: 0.05rem 0.5rem; border-radius: 999px; white-space: nowrap; }
+.lv-chip.ok { background: var(--do-soft); color: var(--do); }
+.lv-chip.bad, .lv-chip.warn { background: var(--dont-soft); color: var(--dont); }
+.lv-chip.key { background: var(--accent-soft); color: var(--accent); }
+.lv-chip.mid { background: var(--line); color: var(--muted); }
+.lv-steps { list-style: none; margin: 0; padding: 0; display: grid; }
+.lv-steps li { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 0.8rem; padding: 0.55rem 0; border-top: 1px solid var(--line); font-size: 0.95rem; }
+.lv-steps li:first-child { border-top: 0; }
+.lv-when { font-weight: 600; color: var(--accent); }
+.lv-cases { list-style: none; margin: 0; padding: 0; display: grid; }
+.lv-cases li { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: 0.5rem; padding: 0.55rem 0; border-top: 1px solid var(--line); font-size: 0.94rem; }
+.lv-cases li:first-child { border-top: 0; }
+.lv-n { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 0.85rem; }
+.lv-h { font-weight: 600; }
+.lv-d { color: var(--muted); }
+.lv-cases li.lv-mine { background: var(--accent-soft); border-radius: 6px; padding-inline: 0.5rem; }
+.lv-cases a, .lv-stack a { color: var(--accent); }
+@media (max-width: 30rem) { .lv-reason, .lv-steps li { grid-template-columns: 1fr; gap: 0.3rem; } }
 </style>
 </head>
 <body>
@@ -1979,6 +2023,12 @@ footer.end p { margin: 0; }
       <p>아빠가 육아휴직을 쓸지, 쓴다면 언제 몇 개월 쓸지 정하는 기준을 모았다. 제도는 2026년 10월 법령 기준이다.</p>
       <p class="note">카드마다 "근거 보기"에 출처가 있다. 검증 방법은 <a href="#check">행동 강령 탭 맨 아래</a>에 있다.</p>
     </div>
+    <div class="subtabs" role="tablist" aria-label="육아휴직 판단 하위 탭">
+      <button role="tab" aria-controls="leave-check" aria-selected="true">체크리스트</button>
+      <button role="tab" aria-controls="leave-report" aria-selected="false">내 리포트</button>
+      <button role="tab" aria-controls="leave-cases" aria-selected="false">사례 분석</button>
+    </div>
+    <div class="subpanel" id="leave-check" role="tabpanel">
     <ol class="rules">
 
       <li class="rule care" id="l1"><div class="num">1</div><div class="body">
@@ -2148,6 +2198,136 @@ footer.end p { margin: 0; }
       </div></li>
 
     </ol>
+    </div>
+    <div class="subpanel" id="leave-report" role="tabpanel">
+    <div class="lv-stack">
+      <div class="panel lv-verdict">
+        <div class="lv-label">우리 집 결론</div>
+        <p class="lv-q">배우자가 늘어난 6개월을 쓸 생각이 있는지가 결정 변수다. <span class="lv-pending">아직 미정</span></p>
+        <div class="lv-forks">
+          <div class="lv-fork"><b>쓸 생각이 있다 → 아빠 3개월 휴직</b><span>평가 결과가 나오고 두 달쯤 뒤에 시작한다. 그 비용으로 배우자 6개월 옵션을 얻는다.</span></div>
+          <div class="lv-fork"><b>쓸 생각이 없다 → 휴직하지 않음</b><span>남은 기간은 나중을 위해 둔다. 아이가 아프거나 방학일 땐 1~2주 단기 휴직을 쓴다.</span></div>
+        </div>
+      </div>
+
+      <div class="lv-block">
+        <h3>상황</h3>
+        <ul class="lv-bul">
+          <li>아이 20개월, 어린이집에 다닌다. 배우자는 육아휴직 1년을 쓰고 복직했다.</li>
+          <li>아빠는 유연근무로 평일 아침과 저녁 돌봄을 매일 맡고, 주말은 종일 함께 보낸다. 주중 일부는 조부모 도움을 받는다.</li>
+          <li>일이 재미있고, 휴직하면 기술 감각이 떨어질까 가장 걱정한다.</li>
+        </ul>
+      </div>
+
+      <div class="lv-block">
+        <h3>결정 기준</h3>
+        <div class="lv-table"><table>
+          <thead><tr><th>이런 경우</th><th>결정</th></tr></thead>
+          <tbody>
+            <tr><td>배우자가 늘어난 기간을 쓰려고 한다</td><td>3개월 휴직</td></tr>
+            <tr><td>아빠가 지쳐 아이에게 짜증이 늘기 시작한다</td><td>시점과 상관없이 3개월 휴직</td></tr>
+            <tr><td>유연근무나 조부모 도움이 끊긴다</td><td>3개월 휴직을 다시 검토</td></tr>
+          </tbody>
+        </table></div>
+        <p class="lv-note">셋 다 아니면 휴직하지 않는다.</p>
+      </div>
+
+      <div class="lv-block">
+        <h3>근거 4가지</h3>
+        <div class="lv-reasons">
+          <div class="lv-reason"><span class="lv-chip ok">문제없음</span><div><b>돈</b>
+            <ul class="lv-bul"><li>휴직 중에도 가계는 흑자다. 비상금은 건드리지 않는다.</li><li>포기하는 금액은 (아빠 월 실수령 − 급여) × 개월 수 + 성과급 감액이다. 4개월째부터 급여 상한이 낮아지니 3개월이 효율 구간이다.</li></ul></div></div>
+          <div class="lv-reason"><span class="lv-chip key">결정의 핵심</span><div><b>늘어나는 기간</b>
+            <ul class="lv-bul"><li>아빠가 3개월 이상 쓰면 두 사람 모두 1년 6개월까지 늘어난다. 쓰고 나면 아빠 1년 3개월, 배우자 6개월이 남는다.</li><li>겹쳐 쓸 필요가 없고, 회사는 거부할 수 없다.</li></ul></div></div>
+          <div class="lv-reason"><span class="lv-chip mid">중립</span><div><b>아이 발달</b>
+            <ul class="lv-bul"><li>아빠 돌봄 시간이 이미 맞벌이 아빠 평균보다 훨씬 많다. 아빠 휴직이 아이 발달을 바꿨다는 근거는 약하고 엇갈린다.</li><li>아이에게 짜증을 내지 않으니 번아웃 위험도 낮다.</li></ul></div></div>
+          <div class="lv-reason"><span class="lv-chip warn">관리 가능</span><div><b>커리어</b>
+            <ul class="lv-bul"><li>평가 결과가 나온 뒤 시작하면 지난 평가는 영향이 없다. 다음 평가 기간은 4분의 1이 빈다.</li><li>성과급을 휴직 기간만큼 줄여도 되는지는 확인하지 못했다. 팀 분위기는 우호적이다.</li><li>기술 공백은 어린이집에 있는 평일 낮 시간 일부로 메운다.</li></ul></div></div>
+        </div>
+      </div>
+
+      <div class="lv-block">
+        <h3>사례에서 본 위치</h3>
+        <ul class="lv-bul">
+          <li>안 쓰고 후회한 아빠들은 주로 눈치나 죄책감 때문에 안 썼다. 우리 집 이유와 다르다.</li>
+          <li>안 써도 괜찮았던 아빠들은 유연근무로 매일 육아 시간을 냈다. 우리 집 조건과 같다(사례 분석 19번).</li>
+        </ul>
+      </div>
+
+      <div class="lv-block">
+        <h3>쓴다면 순서</h3>
+        <ol class="lv-steps">
+          <li><span class="lv-when">평가 기간 중</span><span>배우자 의향을 확정한다</span></li>
+          <li><span class="lv-when">평가 결과 1~2개월 전</span><span>상사에게 알리고, 인사팀에 휴직자 평가 방식을 묻는다. 혼자만 아는 일에 담당자와 문서를 남긴다</span></li>
+          <li><span class="lv-when">시작 30일 전까지</span><span>휴직 신청서를 낸다</span></li>
+          <li><span class="lv-when">휴직 3개월</span><span>등원부터 재우기까지 혼자 맡는다. 평일 낮은 휴식 30%, 기술 실습 30%, 건강 20%, 집안 정리 15%. 처음 2주는 절반 이상 쉰다</span></li>
+          <li><span class="lv-when">복귀 후</span><span>남은 기간은 초등 입학처럼 필요한 때를 위해 둔다</span></li>
+        </ol>
+      </div>
+
+      <div class="lv-block">
+        <h3>남은 질문</h3>
+        <ul class="lv-bul">
+          <li>배우자가 늘어난 6개월을 쓸 생각이 있는지</li>
+          <li>안 쓰고 5년 뒤, 쓰고 5년 뒤 각각 가장 아쉬울 것 하나</li>
+          <li>회사가 휴직 기간을 평가와 성과급에 어떻게 반영하는지</li>
+        </ul>
+      </div>
+    </div>
+    </div>
+    <div class="subpanel" id="leave-cases" role="tabpanel">
+    <div class="lv-stack">
+      <p class="lv-note">휴직을 쓴 아빠와 안 쓴 아빠의 후기 25개를 모았다. 모두 출처 페이지를 열어 확인했다. 대기업 개발자·아이 1~3세·엄마 복직 뒤 아빠 단독 휴직에 딱 맞는 사례는 찾지 못했다.</p>
+      <div class="lv-block">
+<h3>만족과 후회를 가른 것</h3>
+    <ol class="lv-bul">
+      <li><b>돌아갈 자리:</b> 만족한 사례는 복귀가 보장됐고, 부정적인 사례는 자리·프로젝트를 잃었다. 기간보다 이게 컸다.</li>
+      <li><b>업무 이관:</b> 내가 없어도 돌아가게 해 둔 경우는 문제가 없었다.</li>
+      <li><b>휴직을 무엇으로 봤나:</b> 아이와의 시간으로 본 사람은 만족, 자기계발을 기대한 사람은 대체로 실패, 쉬는 시간으로만 본 경우는 부부 갈등.</li>
+      <li><b>기간:</b> 3개월은 대체로 좋은 기억, 1~2년은 체력 소진·고과 포기·조기 복귀가 섞였다.</li>
+      <li><b>안 쓴 사람:</b> 후회는 "쓸 수 있었는데 눈치·죄책감으로 안 씀". 괜찮았던 쪽은 "유연근무로 육아 시간 확보" 또는 "일이 재밌어서 스스로 선택".</li>
+    </ol>
+
+    <h3>쓴 아빠 (16)</h3>
+    <ol class="lv-cases">
+      <li><span class="lv-n">1</span><div><span class="lv-chip ok">만족</span> <span class="lv-h">개발자 · 6세 · 3개월</span> <a href="https://brunch.co.kr/@country/96" target="_blank" rel="noopener">브런치</a><div class="lv-d">"오늘이 가장 어린 아이의 시간." 무조건 쓰라고 권함. AI 공부는 계획만큼 못 함</div></div></li>
+      <li><span class="lv-n">2</span><div><span class="lv-chip mid">중립</span> <span class="lv-h">시니어 프론트 개발자 · 짧게</span> <a href="https://toss.im/career/article/44995" target="_blank" rel="noopener">토스</a><div class="lv-d">휴직 중 커리어를 고민하다 이직. 채용 홍보 인터뷰</div></div></li>
+      <li><span class="lv-n">3</span><div><span class="lv-chip ok">만족</span> <span class="lv-h">대기업 과장 10년차 · 16개월</span> <a href="https://nocutnews.co.kr/news/6549439" target="_blank" rel="noopener">노컷뉴스</a><div class="lv-d">아이가 아빠를 찾아 행복. 지인은 "고과 C" 이야기를 들음</div></div></li>
+      <li><span class="lv-n">4</span><div><span class="lv-chip ok">만족</span> <span class="lv-h">중소기업 4년차 · 13개월 · 6개월</span> <a href="https://nocutnews.co.kr/news/6549439" target="_blank" rel="noopener">노컷뉴스</a><div class="lv-d">아이가 "아빠"를 더 많이 말함. 인사 시즌 직전이라 불안했음</div></div></li>
+      <li><span class="lv-n">5</span><div><span class="lv-chip ok">만족</span> <span class="lv-h">ICT 기자 · 영아 · 1년</span> <a href="https://www.mt.co.kr/society/2025/08/24/2025082411520142049" target="_blank" rel="noopener">머니투데이</a><div class="lv-d">성장을 직접 본 게 경이로움. 업무 감각 걱정에 연재로 유지</div></div></li>
+      <li><span class="lv-n">6</span><div><span class="lv-chip ok">만족</span> <span class="lv-h">YTN 기자(첫 남성 휴직) · 1년 · 2015</span> <a href="https://www.journalist.or.kr/m/m_article.html?no=37196" target="_blank" rel="noopener">기자협회보</a><div class="lv-d">복귀 뒤 일 만족도가 오히려 올라감</div></div></li>
+      <li><span class="lv-n">7</span><div><span class="lv-chip ok">만족</span> <span class="lv-h">신문 기자 · 40개월 · 1년 · 2019</span> <a href="https://journalist.or.kr/m/m_article.html?no=46447" target="_blank" rel="noopener">기자협회보</a><div class="lv-d">"주말에만 놀아주는 사람이더라." 자기계발은 거의 못 함</div></div></li>
+      <li><span class="lv-n">8</span><div><span class="lv-chip ok">만족</span> <span class="lv-h">대기업 · 1년</span> <a href="https://brunch.co.kr/@paradishift/361" target="_blank" rel="noopener">브런치</a><div class="lv-d">휴직 자체가 기회. 복직이 다가오며 체력 소진, 이직·창업 고민</div></div></li>
+      <li><span class="lv-n">9</span><div><span class="lv-chip ok">만족</span> <span class="lv-h">자동차 회사(첫 남성 휴직) · 3개월</span> <a href="https://www.mt.co.kr/society/2023/12/02/2023112915515738402" target="_blank" rel="noopener">머니투데이</a><div class="lv-d">퇴사까지 각오했지만 회사 반응이 좋았고 뒤이어 휴직자가 생김</div></div></li>
+      <li><span class="lv-n">10</span><div><span class="lv-chip mid">중립</span> <span class="lv-h">중소기업 · 6개월 신청 → 3개월 복귀</span> <a href="https://www.clien.net/service/board/park/18083208" target="_blank" rel="noopener">클리앙</a><div class="lv-d">"육아가 너무 힘들어서" 조기 복귀. 지금도 잘 다님</div></div></li>
+      <li><span class="lv-n">11</span><div><span class="lv-chip mid">중립</span> <span class="lv-h">대기업 · 약 2년 · 2017</span> <a href="https://www.clien.net/service/board/park/18083208" target="_blank" rel="noopener">클리앙</a><div class="lv-d">고과를 포기하고 씀. 휴직 중 이직</div></div></li>
+      <li><span class="lv-n">12</span><div><span class="lv-chip bad">부정</span> <span class="lv-h">매장 책임자 · 2년</span> <a href="https://gworkingmom.net/network/articles/96" target="_blank" rel="noopener">직장맘센터</a><div class="lv-d">복직 후 강등·괴롭힘. 업무상 재해 인정</div></div></li>
+      <li><span class="lv-n">13</span><div><span class="lv-chip bad">부정</span> <span class="lv-h">해외 테크</span> <a href="https://news.ycombinator.com/item?id=20681739" target="_blank" rel="noopener">Hacker News</a><div class="lv-d">휴직 중 프로젝트를 빼앗기고 해고까지 이어짐</div></div></li>
+      <li><span class="lv-n">21</span><div><span class="lv-chip mid">중립</span> <span class="lv-h">구글 테크 리드 · 2015</span> <a href="https://www.refinery29.com/en-us/silicon-valley-paternity-leave" target="_blank" rel="noopener">Refinery29</a><div class="lv-d">휴직을 다 쓰고 복귀, 조직 개편이 겹쳐 페이스북으로 이직</div></div></li>
+      <li><span class="lv-n">22</span><div><span class="lv-chip mid">중립</span> <span class="lv-h">해외 개발자 · 4개월</span> <a href="https://news.ycombinator.com/item?id=20681739" target="_blank" rel="noopener">Hacker News</a><div class="lv-d">"커리어에서 뒤처질 수 있다는 걸 받아들인다"</div></div></li>
+      <li><span class="lv-n">23</span><div><span class="lv-chip bad">부정</span> <span class="lv-h">아내 증언 · 1년 계획</span> <a href="https://v.daum.net/v/20241009131150805" target="_blank" rel="noopener">다음뉴스</a><div class="lv-d">남편이 쉬기만 해서 매일 다툼, 3개월 만에 조기 복직시킴</div></div></li>
+    </ol>
+
+    <h3>안 쓴 아빠 (7)</h3>
+    <ol class="lv-cases">
+      <li><span class="lv-n">14</span><div><span class="lv-chip bad">후회</span> <span class="lv-h">직장인 · 두 딸 8·11세 · 2006</span> <a href="https://pressian.com/pages/articles/81390" target="_blank" rel="noopener">프레시안</a><div class="lv-d">"어떻게 컸는지 모르겠다." 회사 분위기 때문에 못 씀</div></div></li>
+      <li><span class="lv-n">15</span><div><span class="lv-chip bad">후회</span> <span class="lv-h">11년차 · 첫째 땐 안 쓰고 둘째 때 사용</span> <a href="https://www.khan.co.kr/article/201604051617391" target="_blank" rel="noopener">경향</a><div class="lv-d">"왜 더 빨리 참여 안 했을까"</div></div></li>
+      <li><span class="lv-n">16</span><div><span class="lv-chip bad">후회</span> <span class="lv-h">미국 소규모 회사 · 1주 만에 복귀</span> <a href="https://mother.ly/?p=55629" target="_blank" rel="noopener">Motherly</a><div class="lv-d">"명백히 나쁜 결정." 잘릴 걱정 없었는데 스스로 복귀</div></div></li>
+      <li><span class="lv-n">17</span><div><span class="lv-chip bad">후회</span> <span class="lv-h">미국 대학 상담직 · 3개월 중 2주만</span> <a href="https://www.scarymommy.com/dads-should-take-paternity-leave" target="_blank" rel="noopener">Scary Mommy</a><div class="lv-d">상사 눈치와 가장 노릇 죄책감</div></div></li>
+      <li><span class="lv-n">18</span><div><span class="lv-chip bad">갈등</span> <span class="lv-h">보수적 회사 · 못 씀</span> <a href="https://v.daum.net/v/20241009131150805" target="_blank" rel="noopener">다음뉴스</a><div class="lv-d">아내가 다른 집 남편과 비교해 서운함</div></div></li>
+      <li class="lv-mine"><span class="lv-n">19</span><div><span class="lv-chip ok">괜찮음</span> <span class="lv-h">토스 프론트 개발자 · 휴직 대신 유연근무</span> <a href="https://toss.im/career/article/44995" target="_blank" rel="noopener">토스</a><div class="lv-d">일찍 퇴근해 아이를 보고 밤에 일함. "내가 없어도 돌아가게 설계." 유연근무형 집과 가장 비슷함</div></div></li>
+      <li><span class="lv-n">20</span><div><span class="lv-chip ok">괜찮음</span> <span class="lv-h">구글 본사 개발자 · 6개월 중 1개월만</span> <a href="https://www.matthew.kr/%EA%B5%AC%EA%B8%80-%EB%B3%B8%EC%82%AC-%EA%B0%9C%EB%B0%9C%EC%9E%90-1%EB%85%84-%ED%9A%8C%EA%B3%A0/" target="_blank" rel="noopener">블로그</a><div class="lv-d">회사에서 배우고 싶은 게 많았고 평가도 좋았음</div></div></li>
+    </ol>
+
+    <h3>휴직 활용 관련 (2)</h3>
+    <ol class="lv-cases">
+      <li><span class="lv-n">24</span><div><span class="lv-chip mid">중립</span> <span class="lv-h">40대 기자 · 1년</span> <a href="https://www.mt.co.kr/society/2026/02/16/2026021523450521858" target="_blank" rel="noopener">머니투데이</a><div class="lv-d">개인 과제를 계획했지만 병원 진료 정도. 남는 시간은 집안일과 낮잠</div></div></li>
+      <li><span class="lv-n">25</span><div><span class="lv-chip ok">만족</span> <span class="lv-h">개발자</span> <a href="https://yozm.wishket.com/magazine/detail/2450/" target="_blank" rel="noopener">요즘IT</a><div class="lv-d">휴직 중 1일 1커밋 같은 작은 습관으로 감각 유지</div></div></li>
+    </ol>
+    <p class="lv-note">편향: 글·인터뷰를 남긴 사람만 모았다. 2006~2019년 기사는 지금 제도·분위기와 다를 수 있다. 클리앙·HN 댓글은 사실 검증이 안 된다. 블라인드는 공개글만, 레딧은 접속이 막혀 못 봤다.</p>
+      </div>
+    </div>
+    </div>
   </section>
 </section>
 
@@ -2180,6 +2360,24 @@ footer.end p { margin: 0; }
     });
   });
   window.addEventListener('hashchange', fromHash); fromHash();
+  var subs = [].slice.call(document.querySelectorAll('.subpanel'));
+  function act(p) {
+    var wrap = p.parentNode, bar = wrap.querySelector('.subtabs');
+    [].slice.call(wrap.children).forEach(function (c) { if (c.classList.contains('subpanel')) c.hidden = c !== p; });
+    [].slice.call(bar.querySelectorAll('button')).forEach(function (b) { var on = b.getAttribute('aria-controls') === p.id; b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1; });
+  }
+  [].slice.call(document.querySelectorAll('.subtabs')).forEach(function (bar) {
+    var first = document.getElementById(bar.querySelector('button').getAttribute('aria-controls')); if (first) act(first);
+    [].slice.call(bar.querySelectorAll('button')).forEach(function (b) {
+      b.addEventListener('click', function () { var id = b.getAttribute('aria-controls'); act(document.getElementById(id)); history.replaceState(null, '', '#' + id); });
+    });
+  });
+  function subHash() {
+    var h = decodeURIComponent(location.hash.slice(1)); var el = h && document.getElementById(h);
+    var p = el && (el.classList.contains('subpanel') ? el : el.closest('.subpanel'));
+    if (p) { act(p); if (el !== p) el.scrollIntoView(); }
+  }
+  window.addEventListener('hashchange', subHash); subHash();
 })();
 </script>
 </body>

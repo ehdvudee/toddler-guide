@@ -218,6 +218,7 @@ footer.end p { margin: 0; }
 .lv-d { color: var(--muted); }
 .lv-cases li.lv-mine { background: var(--accent-soft); border-radius: 6px; padding-inline: 0.5rem; }
 .lv-cases a, .lv-stack a { color: var(--accent); }
+.lv-num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 @media (max-width: 30rem) { .lv-reason, .lv-steps li { grid-template-columns: 1fr; gap: 0.3rem; } }
 </style>
 </head>
@@ -2027,6 +2028,8 @@ footer.end p { margin: 0; }
       <button role="tab" aria-controls="leave-check" aria-selected="true">체크리스트</button>
       <button role="tab" aria-controls="leave-report" aria-selected="false">내 리포트</button>
       <button role="tab" aria-controls="leave-cases" aria-selected="false">사례 분석</button>
+      <button role="tab" aria-controls="leave-dev" aria-selected="false">발달 연구</button>
+      <button role="tab" aria-controls="leave-use" aria-selected="false">휴직 활용</button>
     </div>
     <div class="subpanel" id="leave-check" role="tabpanel">
     <ol class="rules">
@@ -2325,6 +2328,105 @@ footer.end p { margin: 0; }
       <li><span class="lv-n">25</span><div><span class="lv-chip ok">만족</span> <span class="lv-h">개발자</span> <a href="https://yozm.wishket.com/magazine/detail/2450/" target="_blank" rel="noopener">요즘IT</a><div class="lv-d">휴직 중 1일 1커밋 같은 작은 습관으로 감각 유지</div></div></li>
     </ol>
     <p class="lv-note">편향: 글·인터뷰를 남긴 사람만 모았다. 2006~2019년 기사는 지금 제도·분위기와 다를 수 있다. 클리앙·HN 댓글은 사실 검증이 안 된다. 블라인드는 공개글만, 레딧은 접속이 막혀 못 봤다.</p>
+      </div>
+    </div>
+    </div>
+    <div class="subpanel" id="leave-dev" role="tabpanel">
+    <div class="lv-stack">
+      <div class="panel lv-verdict">
+        <div class="lv-label">질문</div>
+        <p class="lv-q">아빠가 이미 매일 아이를 돌보고 있다면, 휴직하면 아이에게 더 좋은가?</p>
+        <p class="lv-note">답: 이미 충분하다. 휴직이 아이 발달을 더 끌어올릴 여지는 낮음~중간이다. 휴직의 가치는 아빠 회복, 배우자의 늘어난 기간, 이후 참여 지속에서 나온다. 한국 아빠 휴직의 인과 효과를 다룬 연구는 찾지 못했다.</p>
+      </div>
+      <div class="lv-block">
+<h3>양보다 질</h3>
+    <ul class="lv-bul">
+      <li>종단연구 24편 중 22편이 아빠 관여의 긍정 효과를 보고했다. 효과가 확인된 형태는 아이와 직접 상호작용하는 것뿐이다. (Sarkadi 2008, 체계적 문헌고찰)</li>
+      <li>24·36개월 아이의 언어·인지는 아빠의 민감성과 인지 자극이 예측했다. 엄마 효과와 별개였다. (Tamis-LeMonda 2004)</li>
+      <li>OECD 4개국 분석: 시간보다 활동 유형이 중요했다. (Huerta 2013)</li>
+      <li>한국 25~39세 맞벌이 아빠 하루 돌봄은 평균 1시간 22분이다(2024 생활시간조사). 매일 아침·저녁 돌봄에 주말 종일을 함께하는 아빠라면 이보다 훨씬 많다.</li>
+    </ul>
+
+    <h3>아빠 휴직의 장기 효과</h3>
+    <div class="lv-table"><table>
+      <thead><tr><th>연구</th><th>결과</th><th>근거</th></tr></thead>
+      <tbody>
+        <tr><td>노르웨이 아빠 할당제</td><td>아빠 학력이 엄마보다 높은 집에서만 16세 성적 상승. 초기 원고는 효과 없음</td><td>자연실험</td></tr>
+        <tr><td>캐나다 퀘벡</td><td>제도 도입 뒤 부모가 된 아빠들의 가사 시간이 1~3년 뒤에도 23% 많음</td><td>자연실험</td></tr>
+        <tr><td>스웨덴 아빠의 달</td><td>아빠 휴직은 늘었지만 전통적 분담 가정에서 이혼·별거 확률도 상승</td><td>자연실험</td></tr>
+        <tr><td>스웨덴 엄마 소득</td><td>아빠가 한 달 더 쓰는 쪽이 엄마 소득에 유리</td><td>패널</td></tr>
+        <tr><td>독일 단독 휴직</td><td>단독·긴 휴직 아빠가 이후 돌봄·가사를 더 맡음</td><td>관찰</td></tr>
+        <tr><td>독일 2024</td><td>엄마와 함께 최소 기간만 쓴 아빠는 이후 역할이 거의 그대로</td><td>자연실험</td></tr>
+        <tr><td>한국</td><td>인과 효과를 다룬 실증 연구 없음</td><td>미확인</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>이미 많이 하는 아빠에게</h3>
+    <ul class="lv-bul">
+      <li>휴직은 주로 덜 참여하던 아빠를 바꾼다. 이미 많이 하면 더 늘 여지가 작다. 연구에서 끌어낸 추론이고 직접 검증된 건 아니다.</li>
+      <li>부모 번아웃은 방임·폭력과 관련이 있었고(Mikolajczak 2018), 아빠 우울은 아이 발달에 부정적이었다(Sweeney 2016). 아이에게 짜증이 늘지 않았다면 이 위험은 낮다.</li>
+    </ul>
+      </div>
+    </div>
+    </div>
+    <div class="subpanel" id="leave-use" role="tabpanel">
+    <div class="lv-stack">
+      <div class="panel lv-verdict">
+        <div class="lv-label">질문</div>
+        <p class="lv-q">휴직 3개월을 어떻게 쓸까? 쉬거나 게임하는 시간은 괜찮나?</p>
+        <p class="lv-note">답: 평일 낮의 30%는 휴식·게임으로 먼저 떼어 둔다. 효과는 아이와 보낸 시간보다 "혼자 책임진 경험"에서 나온다. 개발자 3개월 공백을 직접 잰 연구는 찾지 못했다.</p>
+      </div>
+      <div class="lv-block">
+<h3>휴식·게임은 정당하다</h3>
+    <ul class="lv-bul">
+      <li>부모 번아웃은 방임·폭력과 관련이 있다. "부모가 배터리를 충전하게 하는 모든 것은 아이에게 좋다." (APS 보도)</li>
+      <li>여가 시간은 번아웃을 막는 자원이다. 게임은 일에서 심리적으로 떨어지는 회복 효과가 있다는 연구가 있다.</li>
+    </ul>
+
+    <h3>휴직자들이 실제로 쓴 방식</h3>
+    <ul class="lv-bul">
+      <li>"개인 시간을 쓰겠다"는 계획은 대체로 실패했다(사례 1, 7, 24).</li>
+      <li>오래 남는 효과는 아이 루틴을 혼자 책임진 경험이다. 영국 맞벌이 10쌍 5년 추적에서 혼자 맡았던 아빠들은 5년 뒤에도 육아를 많이 한다고 말했다(질적 연구).</li>
+    </ul>
+
+    <h3>기술 공백</h3>
+    <ul class="lv-bul">
+      <li>쓰지 않는 기술은 줄어든다. 1년이 넘으면 감소폭이 크고, 인지 과제가 신체 과제보다 빨리 잊힌다(Arthur 1998).</li>
+      <li>개발자 3개월 공백을 직접 잰 연구는 찾지 못했다.</li>
+      <li>1일 1커밋 같은 작은 습관을 이어간 사례가 있다(사례 25).</li>
+    </ul>
+
+    <h3>겸업 규정</h3>
+    <ul class="lv-bul">
+      <li>주 15시간 이상 일하거나 월 150만 원 이상 벌면 그 기간 급여가 나오지 않는다(고용보험법 시행규칙 제116조).</li>
+      <li>일하거나 번 돈이 있으면 급여 신청서에 사실대로 적는다. 무급 학습·오픈소스 기여는 소득이 아니다.</li>
+      <li>회사 겸업·보안 규정은 따로 확인한다.</li>
+    </ul>
+
+    <h3>평일 낮 시간 배분 (3개월, 약 420시간)</h3>
+    <div class="lv-table"><table>
+      <thead><tr><th>영역</th><th>비율</th><th>시간</th></tr></thead>
+      <tbody>
+        <tr><td>휴식·게임</td><td class="lv-num">30%</td><td class="lv-num">약 125h</td></tr>
+        <tr><td>기술·AI 실습</td><td class="lv-num">30%</td><td class="lv-num">약 125h</td></tr>
+        <tr><td>건강(운동·검진)</td><td class="lv-num">20%</td><td class="lv-num">약 85h</td></tr>
+        <tr><td>집안 시스템·아이 루틴 준비</td><td class="lv-num">15%</td><td class="lv-num">약 65h</td></tr>
+        <tr><td>버퍼</td><td class="lv-num">5%</td><td class="lv-num">약 20h</td></tr>
+      </tbody>
+    </table></div>
+    <p class="lv-note">연구로 검증된 비율이 아니라 근거를 종합한 제안이다. 처음 2주는 휴식을 50% 이상으로 둔다. 하원 이후 저녁 루틴은 아빠가 혼자 맡는다.</p>
+
+    <h3>주간 시간표 예시 (평일 09~16시)</h3>
+    <div class="lv-table"><table>
+      <thead><tr><th>요일</th><th>09–10</th><th>10–13</th><th>13–14</th><th>14–16</th></tr></thead>
+      <tbody>
+        <tr><td>월</td><td>운동</td><td>AI 실습(작은 사이드 프로젝트)</td><td>점심</td><td>게임·휴식</td></tr>
+        <tr><td>화</td><td>운동</td><td>집안 시스템(식단·장보기 자동화)</td><td>점심</td><td>낮잠·휴식</td></tr>
+        <tr><td>수</td><td>운동</td><td>AI 실습·블로그 정리</td><td>점심</td><td>게임·휴식</td></tr>
+        <tr><td>목</td><td>병원·검진</td><td>오픈소스·기술 읽기</td><td>점심</td><td>게임·휴식</td></tr>
+        <tr><td>금</td><td>운동</td><td>주간 회고 1h + 자유</td><td>부부 점심</td><td>버퍼</td></tr>
+      </tbody>
+    </table></div>
       </div>
     </div>
     </div>
